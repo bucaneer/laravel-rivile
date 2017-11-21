@@ -1,0 +1,26 @@
+{
+    "name": "itcity/laravel-rivile",
+    "description": "Rivile integration for Laravel",
+    "keywords": ["laravel", "rivile", "soap"],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Justas Lavišius",
+            "email": "jl@itcity.lt"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "illuminate/framework": "5.5.x"
+    },
+    "autoload": {
+        "psr-4": {
+            "ITCity\\Rivile\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+}
