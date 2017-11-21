@@ -6,7 +6,7 @@ use ITCity\Rivile\Exceptions\RivileMissingKey;
 use ITCity\Rivile\Exceptions\RivileInvalidMethod;
 use SoapClient;
 
-class Interface {
+class RivileInterface {
 	protected $key;
 	protected $wsdl_url = 'http://manorivile.lt/WEBSERVICE_RIV_WEB/awws/webservice.awws?wsdl';
 	protected $soapclient;
