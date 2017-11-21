@@ -67,6 +67,7 @@ class Interface {
 		'GET_N08_LIST'  => [
 			'aliases' => ['getClients'],
 			'params'  => ['in:H,A', 'where'],
+			'map'     => Objects\Client::class,
 		],
 		'GET_N17_LIST'  => [
 			'aliases' => ['getProducts'],
@@ -206,6 +207,14 @@ class Interface {
 			throw new RivileInvalidMethod;
 		}
 		$definition = $this->method_definitions[$method];
-		return $this->_soapMethod($method, $arguments);
+		$raw = $this->_soapMethod($method, $arguments);
+		if (isset($definition['map']) {
+			$map = $definition['map'];
+			return collect($raw)->map(function($item) use ($map) {
+				return new $map($item);
+			});
+		} else {
+			return $raw;
+		}
 	}
 }
