@@ -208,7 +208,7 @@ class RivileInterface {
 		}
 		$definition = $this->method_definitions[$method];
 		$raw = $this->_soapMethod($method, $arguments);
-		if (isset($definition['map']) {
+		if (isset($definition['map'])) {
 			$map = $definition['map'];
 			return collect($raw)->map(function($item) use ($map) {
 				return new $map($item);
