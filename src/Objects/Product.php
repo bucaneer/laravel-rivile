@@ -1,6 +1,6 @@
 <?php
 
-namespace ITCity\Rivile;
+namespace ITCity\Rivile\Objects;
 
 class Product extends Object {
 	protected $prefix = 'N17';

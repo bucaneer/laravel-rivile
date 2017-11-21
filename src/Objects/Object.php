@@ -1,6 +1,6 @@
 <?php
 
-namespace ITCity\Rivile;
+namespace ITCity\Rivile\Objects;
 
 use ITCity\Rivile\Exceptions\RivileInvalidAttribute;
 use ITCity\Rivile\Exceptions\RivileInvalidObject;
