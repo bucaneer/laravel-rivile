@@ -13,6 +13,9 @@ class Object {
 
 	public function __construct ($data = array()) {
 		if ($this->defs) {
+			foreach ($this->defs as $field => &$rules) {
+				$rules[] = 'nullable';
+			}
 			$validator = \Validator::make($data, $this->defs);
 			if ($validator->fails()) {
 				$failed = [];
