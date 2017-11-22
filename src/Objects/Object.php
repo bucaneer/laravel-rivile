@@ -51,7 +51,7 @@ class Object {
 			break;
 			case 'string':
 			default:
-				return $value;
+				return trim($value);
 			break;
 		}
 	}
