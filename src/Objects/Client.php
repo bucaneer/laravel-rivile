@@ -4,9 +4,10 @@ namespace ITCity\Rivile\Objects;
 
 class Client extends Object {
 	protected $prefix = 'N08';
+
 	protected $defs = [
 		'N08_KODAS_KS' => ['string', 'max:12'],
-		'N08_RUSIS' => ['boolean'],
+		'N08_RUSIS' => ['integer', 'in:1,2,3,4'],
 		'N08_PVM_KODAS' => ['string', 'max:25'],
 		'N08_IM_KODAS' => ['string', 'max:13'],
 		'N08_PAV' => ['string', 'max:70'],
