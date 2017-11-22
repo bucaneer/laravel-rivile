@@ -2,10 +2,12 @@
 
 namespace ITCity\Rivile\Objects;
 
-class ProductUnit extends Object {
-	protected $prefix = 'N37';
+class BarCode extends Object {
+	protected static $prefix = 'N37';
 
-	protected $defs = [
+	protected static $primary_key = 'N37_BAR_KODAS';
+
+	protected static $defs = [
 		'N37_KODAS_PS' => ['string', 'max:12'],
 		'N37_KODAS_US' => ['string', 'max:12'],
 		'N37_BAR_KODAS' => ['string', 'max:12'],
