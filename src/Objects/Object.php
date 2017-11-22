@@ -77,4 +77,12 @@ class Object {
 
 		$this->data[$attr_name] = $value;
 	}
+
+	public static function fromList ($list) {
+		$out = collect();
+		foreach ($list as $item) {
+			$out->push(new static($item));
+		}
+		return $out;
+	}
 }
