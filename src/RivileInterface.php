@@ -139,7 +139,7 @@ class RivileInterface {
 		],
 		'GET_PRICE'     => [
 			'aliases' => ['getPrice'],
-			'params'  => ['kodas_ps', 'kodas_us', 'kodas_os', 'serija', 'kodas_is', 'in:1,2,3', 'in:1,2'],
+			'params'  => ['kodas_ps', 'kodas_us', 'kodas_os', 'serija', 'kodas_is', 'numeric', 'kodas_ks', 'in:1,2,3', 'in:1,2'],
 		],
 		'GET_I06_DEBT'  => [
 			'aliases' => ['getInvoiceDebt'],
