@@ -3,8 +3,9 @@
 namespace ITCity\Rivile\Objects;
 
 class Product extends Object {
-	protected $prefix = 'N17';
-	protected $defs = [
+	protected static $prefix = 'N17';
+
+	protected static $defs = [
 		'N17_KODAS_PS' => ['string', 'max:12'],
 		'N17_TIPAS' => ['integer', 'max:2', 'min:1'],
 		'N17_KODAS_P1' => ['string', 'max:12'],

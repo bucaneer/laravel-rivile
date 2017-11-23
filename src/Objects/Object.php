@@ -7,33 +7,38 @@ use ITCity\Rivile\Exceptions\RivileInvalidObject;
 use Carbon\Carbon;
 
 class Object {
-	protected $prefix;
+	protected static $prefix;
+	protected static $primary_key;
+	protected static $query_method;
+	protected static $defs;
+
 	public $data;
-	protected $defs;
 
 	public function __construct ($data = array()) {
-		if ($this->defs) {
-			foreach ($this->defs as $field => &$rules) {
+		if (static::$defs) {
+			foreach (static::$defs as $field => &$rules) {
 				$rules[] = 'nullable';
 			}
-			$validator = \Validator::make($data, $this->defs);
-			if ($validator->fails()) {
-				$failed = [];
-				foreach ($validator->failed() as $field => $rules) {
-					$failed[] = "<{$field}>: <".print_r(array_get($data, $field), true)."> fails [".join(', ', array_keys($rules))."]";
+			if ($data) {
+				$validator = \Validator::make($data, static::$defs);
+				if ($validator->fails()) {
+					$failed = [];
+					foreach ($validator->failed() as $field => $rules) {
+						$failed[] = "<{$field}>: <".print_r(array_get($data, $field), true)."> fails [".join(', ', array_keys($rules))."]";
+					}
+					throw new RivileInvalidObject(join('; ', $failed));
 				}
-				throw new RivileInvalidObject(join('; ', $failed));
 			}
 		}
 		$this->data = $data;
 	}
 
-	protected function prefixedName ($name) {
+	protected static function prefixedName ($name) {
 		$name = strtoupper($name);
-		return $this->prefix ? "{$this->prefix}_{$name}" : $name;
+		return static::$prefix ? static::$prefix.'_'.$name : $name;
 	}
 
-	protected function castValue ($value, $def) {
+	protected static function castValue ($value, $def) {
 		if (!isset($def[0])) return $value;
 		$type = $def[0];
 		switch ($type) {
@@ -56,12 +61,12 @@ class Object {
 		}
 	}
 
-	protected function attrName ($name) {
-		if (array_key_exists($name, $this->defs)) {
+	public static function attrName ($name) {
+		if (array_key_exists($name, static::$defs)) {
 			return $name;
-		} else if (($upper_name = strtoupper($name)) && array_key_exists($upper_name, $this->defs)) {
+		} else if (($upper_name = strtoupper($name)) && array_key_exists($upper_name, static::$defs)) {
 			return $upper_name;
-		} else if (($pref_name = $this->prefixedName($name)) && array_key_exists($pref_name, $this->defs)) {
+		} else if (($pref_name = static::prefixedName($name)) && array_key_exists($pref_name, static::$defs)) {
 			return $pref_name;
 		} else {
 			throw new RivileInvalidAttribute;
@@ -71,7 +76,7 @@ class Object {
 	public function __get ($name) {
 		$attr_name = $this->attrName($name);
 		$value = $this->data[$attr_name];
-		$def = $this->defs[$attr_name];
+		$def = static::$defs[$attr_name];
 		return $this->castValue($value, $def);
 	}
 

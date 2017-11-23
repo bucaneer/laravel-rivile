@@ -3,9 +3,9 @@
 namespace ITCity\Rivile\Objects;
 
 class InvoiceProd extends Object {
-	protected $prefix = 'I07';
+	protected static $prefix = 'I07';
 
-	protected $defs = [
+	protected static $defs = [
 		'I07_KODAS_PO' => ['string', 'max:12'],
 		'I07_EIL_NR' => ['integer', 'max:999999'],
 		'I07_TIPAS' => ['integer', 'in:1,2,3,4,5'],

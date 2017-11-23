@@ -3,9 +3,9 @@
 namespace ITCity\Rivile\Objects;
 
 class Client extends Object {
-	protected $prefix = 'N08';
+	protected static $prefix = 'N08';
 
-	protected $defs = [
+	protected static $defs = [
 		'N08_KODAS_KS' => ['string', 'max:12'],
 		'N08_RUSIS' => ['integer', 'in:1,2,3,4'],
 		'N08_PVM_KODAS' => ['string', 'max:25'],

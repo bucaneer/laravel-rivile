@@ -3,9 +3,9 @@
 namespace ITCity\Rivile\Objects;
 
 class Invoice extends Object {
-	protected $prefix = 'I06';
+	protected static $prefix = 'I06';
 
-	protected $defs = [
+	protected static $defs = [
 		'I06_KODAS_PO' => ['string', 'max:12'],
 		'I06_OP_TIP' => ['integer', 'in:1,2,3,4,51,52,53,54,55,56'],
 		'I06_VAL_POZ' => ['boolean'],
@@ -33,7 +33,7 @@ class Invoice extends Object {
 		'I06_KODAS_SS_M' => ['string', 'max:12'],
 		'I06_SUMA_VAL' => ['numeric', 'max:9999999999999999.99'],
 		'I06_SUMA' => ['numeric', 'max:9999999999.99'],
-		'I06_SUMA_PVM' => ['numerix', 'max:9999999999.99'],
+		'I06_SUMA_PVM' => ['numeric', 'max:9999999999.99'],
 		'I06_KURSAS' => ['numeric', 'max:9999999999.9999999999'],
 		'I06_PERKELTA' => ['integer', 'in:1,2,3'],
 		'I06_ADDUSR' => ['string', 'max:12'],

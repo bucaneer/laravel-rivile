@@ -3,9 +3,9 @@
 namespace ITCity\Rivile\Objects;
 
 class ClientDetails extends Object {
-	protected $prefix = 'N33';
+	protected static $prefix = 'N33';
 
-	protected $defs = [
+	protected static $defs = [
 		'N33_KODAS_KS' => ['string', 'max:12'],
 		'N33_EIL_NR' => ['integer', 'max:999999'],
 		'N33_PAV' => ['string', 'max:70'],

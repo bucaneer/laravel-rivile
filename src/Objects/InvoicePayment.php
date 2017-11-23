@@ -3,9 +3,9 @@
 namespace ITCity\Rivile\Objects;
 
 class InvoicePayment extends Object {
-	protected $prefix = 'I13';
+	protected static $prefix = 'I13';
 
-	protected $defs = [
+	protected static $defs = [
 		'I13_KODAS_PO' => ['string', 'max:12'],
 		'I13_EIL_NR' => ['integer', 'max:999999'],
 		'I13_KODAS_SS' => ['string', 'max:12'],
