@@ -207,6 +207,19 @@ class RivileInterface {
 			throw new RivileInvalidMethod;
 		}
 		$definition = $this->method_definitions[$method];
+
+		if (isset($arguments[0]) && is_array($arguments[0])) {
+			$param_map = $arguments[0];
+			$param_defs = $definition['params'];
+			$call_args = array_fill(0, count($param_defs), '');
+			foreach ($param_map as $key => $val) {
+				if (($i = array_search($key, $param_defs)) !== false) {
+					$call_args[$i] = $val;
+				}
+			}
+			$arguments = $call_args;
+		}
+
 		$raw = $this->_soapMethod($method, $arguments);
 		$root = array_first($raw);
 		if (!isset($root[0])) {
