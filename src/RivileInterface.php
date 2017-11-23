@@ -59,6 +59,7 @@ class RivileInterface {
 		'GET_I06_LIST'  => [
 			'aliases' => ['getInvoices'],
 			'params'  => ['in:H,A', 'where'],
+			'map'     => Objects\Invoice::class,
 		],
 		'GET_I17_LIST'  => [
 			'aliases' => ['getProdStocks', 'getProductStocks'],
@@ -72,10 +73,12 @@ class RivileInterface {
 		'GET_N17_LIST'  => [
 			'aliases' => ['getProducts'],
 			'params'  => ['in:H,A', 'where'],
+			'map'     => Objects\Product::class,
 		],
 		'GET_I33_LIST'  => [
 			'aliases' => ['getProductPrices'],
 			'params'  => ['where'],
+			'map'     => Objects\ProductPrice::class,
 		],
 		'GET_I09_LIST'  => [
 			'aliases' => ['getInternalDocs'],
@@ -104,6 +107,7 @@ class RivileInterface {
 		'GET_N32_LIST'  => [
 			'aliases' => ['getPriceLists'],
 			'params'  => ['where'],
+			'map'     => Objects\PriceList::class,
 		],
 		'GET_N26_LIST'  => [
 			'aliases' => ['getCompoundProducts'],
@@ -112,6 +116,7 @@ class RivileInterface {
 		'GET_N37_LIST'  => [
 			'aliases' => ['getBarcode'],
 			'params'  => ['barcode', 'in:H,A', 'where'],
+			'map'     => Objects\BarCode::class,
 		],
 		'GET_N13_LIST'  => [
 			'aliases' => ['getDiscounts'],
