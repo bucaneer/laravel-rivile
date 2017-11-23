@@ -52,7 +52,7 @@ class Product extends Object {
 		'n17_temper_max' => ['integer', 'max:999'],
 		'n17_temper_min' => ['integer', 'max:999'],
 		'n17_temper_txt' => ['string', 'max:20'],
-		'n17_sertif_poz' => ['boolean'],
+		'n17_sertif_poz' => ['integer', 'max:9'],
 		'n17_kodas_ms' => ['string', 'max:12'],
 		'n17_antkainis' => ['numeric', 'max:9999.99'],
 		'n17_max_nuol' => ['numeric', 'max:9999.99'],
