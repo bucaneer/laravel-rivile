@@ -6,13 +6,13 @@ class InvoicePayment extends Object {
 	protected static $prefix = 'I13';
 
 	protected static $defs = [
-		'I13_KODAS_PO' => ['string', 'max:12'],
-		'I13_EIL_NR' => ['integer', 'max:999999'],
-		'I13_KODAS_SS' => ['string', 'max:12'],
-		'I13_SUMA' => ['numernumericN', 'max:999999999999999.99'],
-		'I13_PAV' => ['string', 'max:40'],
-		'I13_ADDUSR' => ['string', 'max:12'],
-		'I13_USERIS' => ['string', 'max:12'],
-		'I13_R_DATE' => ['date'],
+		'i13_kodas_po' => ['string', 'max:12'],
+		'i13_eil_nr' => ['integer', 'max:999999'],
+		'i13_kodas_ss' => ['string', 'max:12'],
+		'i13_suma' => ['numernumericN', 'max:999999999999999.99'],
+		'i13_pav' => ['string', 'max:40'],
+		'i13_addusr' => ['string', 'max:12'],
+		'i13_useris' => ['string', 'max:12'],
+		'i13_r_date' => ['date'],
 	];
 }

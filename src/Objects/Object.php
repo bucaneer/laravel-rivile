@@ -21,6 +21,7 @@ class Object {
 				$rules[] = 'nullable';
 			}
 			if ($data) {
+				$data = array_change_key_case($data);
 				$validator = \Validator::make($data, static::$defs);
 				if ($validator->fails()) {
 					$failed = [];
@@ -35,8 +36,8 @@ class Object {
 	}
 
 	protected static function prefixedName ($name) {
-		$name = strtoupper($name);
-		return static::$prefix ? static::$prefix.'_'.$name : $name;
+		$name = static::$prefix ? static::$prefix.'_'.$name : $name;
+		return strtolower($name);
 	}
 
 	protected static function castValue ($value, $def) {
@@ -64,15 +65,15 @@ class Object {
 	}
 
 	public static function attrName ($name) {
-		if (array_key_exists($name, static::$defs)) {
-			return $name;
-		} else if (($upper_name = strtoupper($name)) && array_key_exists($upper_name, static::$defs)) {
-			return $upper_name;
-		} else if (($pref_name = static::prefixedName($name)) && array_key_exists($pref_name, static::$defs)) {
+		$lower_name = strtolower($name);
+
+		if (isset(static::$defs[$lower_name])) {
+			return $lower_name;
+		} else if (($pref_name = static::prefixedName($name)) && isset(static::$defs[$pref_name])) {
 			return $pref_name;
-		} else {
-			throw new RivileInvalidAttribute;
 		}
+
+		return $name;
 	}
 
 	public static function getQueryMethod () {
