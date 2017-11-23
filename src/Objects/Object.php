@@ -4,6 +4,7 @@ namespace ITCity\Rivile\Objects;
 
 use ITCity\Rivile\Exceptions\RivileInvalidAttribute;
 use ITCity\Rivile\Exceptions\RivileInvalidObject;
+use ITCity\Rivile\QueryBuilder;
 use Carbon\Carbon;
 
 class Object {
@@ -40,6 +41,7 @@ class Object {
 
 	protected static function castValue ($value, $def) {
 		if (!isset($def[0])) return $value;
+		if ($value === null) return $value;
 		$type = $def[0];
 		switch ($type) {
 			case 'integer':
@@ -73,8 +75,37 @@ class Object {
 		}
 	}
 
+	public static function getQueryMethod () {
+		return isset(static::$query_method) ? static::$query_method : "GET_".static::$prefix."_LIST";
+	}
+
+	public static function getPrimaryKey () {
+		if (isset(static::$primary_key)) {
+			return static::$primary_key;
+		} else {
+			reset(static::$defs);
+			return key(static::$defs);
+		}
+	}
+
+	public static function query () {
+		return new QueryBuilder(static::class);
+	}
+
+	public static function where (...$params) {
+		return (new QueryBuilder(static::class))->where(...$params);
+	}
+
+	public static function find ($value) {
+		return (new QueryBuilder(static::class))->find($value);
+	}
+
 	public function __get ($name) {
-		$attr_name = $this->attrName($name);
+		if ($name == 'id') {
+			$attr_name = $this->getPrimaryKey();
+		} else {
+			$attr_name = $this->attrName($name);
+		}
 		$value = $this->data[$attr_name];
 		$def = static::$defs[$attr_name];
 		return $this->castValue($value, $def);
@@ -84,6 +115,14 @@ class Object {
 		$attr_name = $this->attrName($name);
 
 		$this->data[$attr_name] = $value;
+	}
+
+	public function __isset ($name) {
+		return $this->__get($name) !== null;
+	}
+
+	public function __unset ($name) {
+		return $this->__set($name, null);
 	}
 
 	public static function fromList ($list) {
