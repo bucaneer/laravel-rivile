@@ -107,4 +107,9 @@ class Product extends Object {
 		'n17_pav_k2' => ['string', 'max:100'],
 		'n17_pav_k3' => ['string', 'max:100'],
 	];
+
+	protected static $relation_map = [
+		'i33' => ['name' => 'price', 'class' => ProductPrice::class, 'single' => true],
+		'n37' => ['name' => 'barCode', 'class' => BarCode::class, 'single' => true],
+	];
 }

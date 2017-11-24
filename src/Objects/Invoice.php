@@ -59,11 +59,9 @@ class Invoice extends Object {
 		'i06_aprasymas3' => ['string', 'max:150'],
 	];
 
-	public function getProductsAttribute() {
-		if (isset($this->attributes['i07'])) {
-			return InvoiceProd::fromList($this->attributes['i07']);
-		}
-
-		return null;
-	}
+	protected static $relation_map = [
+		'i07' => ['name' => 'products', 'class' => InvoiceProd::class],
+		'i08' => ['name' => 'delays',   'class' => InvoiceDelay::class],
+		'i09' => ['name' => 'payments', 'class' => InvoicePayment::class],
+	];
 }
