@@ -23,3 +23,12 @@ function object2array($arrObjData, $arrSkipIndices = array()) {
 function query_result ($items, $query) {
 	return new ITCity\Rivile\QueryResult($items, $query);
 }
+
+function array_to_xml(array $arr, SimpleXMLElement $xml) {
+    foreach ($arr as $k => $v) {
+        is_array($v)
+            ? array_to_xml($v, $xml->addChild($k))
+            : $xml->addChild($k, $v);
+    }
+    return $xml;
+}
