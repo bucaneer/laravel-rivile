@@ -26,6 +26,6 @@ class QueryGrammar extends Grammar{
     }
 
     protected function processColumn($query, $column) {
-    	return $query->object::attrName($column);
+    	return $query->rivile_object::attrName($column);
     }
 }
