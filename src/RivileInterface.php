@@ -226,6 +226,10 @@ class RivileInterface {
 		}
 
 		$raw = $this->_soapMethod($method, $arguments);
+		reset($raw);
+		if(key($raw) == 'ERROR') {
+			throw new Exceptions\RivileSoapError(current($raw));
+		}
 		$root = array_first($raw);
 		if (!isset($root[0])) {
 			$root = [$root];
