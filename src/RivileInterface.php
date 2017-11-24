@@ -11,144 +11,197 @@ class RivileInterface {
 	protected $wsdl_url = 'http://manorivile.lt/WEBSERVICE_RIV_WEB/awws/webservice.awws?wsdl';
 	protected $soapclient;
 
+	protected $param_validation = [
+		'edit' => 'in:I,U,D',
+		'get' => 'in:H,A',
+		'language' => 'in:LT,EN',
+		'kiekis' => 'numeric',
+		'ps_tip' => 'in:1,2,3',
+		'op_tip' => 'in:1,2',
+		'module' => 'in:RO,PO',
+	];
+
 	protected $method_definitions = [
 		'EDIT_I06'      => [
 			'aliases' => ['editInvoice'],
-			'params'  => ['in:I,U,D', 'xml:i06'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\Invoice::class,
 		],
 		'EDIT_I07'      => [
 			'aliases' => ['editInvoiceProds'],
-			'params'  => ['in:I,U,D', 'xml:i07'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\InvoiceProd::class,
 		],
 		'EDIT_I08'      => [
 			'aliases' => ['editInvoiceDelays'],
-			'params'  => ['in:I,U,D', 'xml:i08'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\InvoiceDelay::class,
 		],
 		'EDIT_I13'      => [
 			'aliases' => ['editInvoicePayment'],
-			'params'  => ['in:I,U,D', 'xml:i13'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\InvoicePayment::class,
 		],
 		'EDIT_I33'      => [
 			'aliases' => ['editProductPrice'],
-			'params'  => ['in:I,U,D', 'xml:i33'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\ProductPrice::class,
 		],
 		'EDIT_N08'      => [
 			'aliases' => ['editClient'],
-			'params'  => ['in:I,U,D', 'xml:n08'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\Client::class,
 		],
 		'EDIT_N17'      => [
 			'aliases' => ['editProduct'],
-			'params'  => ['in:I,U,D', 'xml:n17'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\Product::class,
 		],
 		'EDIT_N33'      => [
 			'aliases' => ['editClientDetails'],
-			'params'  => ['in:I,U,D', 'xml:n33'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\ClientDetails::class,
 		],
 		'EDIT_N37'      => [
-			'aliases' => ['editProductUnits'],
-			'params'  => ['in:I,U,D', 'xml:n37'],
+			'aliases' => ['editBarcode'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\BarCode::class,
 		],
 		'EDIT_I09'      => [
 			'aliases' => ['editInternalDoc'],
-			'params'  => ['in:I,U,D', 'xml:i09'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\InternalCode::class,
 		],
 		'EDIT_I10'      => [
-			'aliases' => ['editInternalDocdetails'],
-			'params'  => ['in:I,U,D', 'xml:i10'],
+			'aliases' => ['editInternalDocProd'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\InternalDocProd::class,
 		],
 		'GET_I06_LIST'  => [
 			'aliases' => ['getInvoices'],
-			'params'  => ['in:H,A', 'where'],
+			'params'  => ['get', 'where'],
 			'map'     => Objects\Invoice::class,
+			'order'   => ['i06_kodas_po'],
 		],
 		'GET_I17_LIST'  => [
 			'aliases' => ['getProdStocks', 'getProductStocks'],
 			'params'  => ['where'],
+			'map'     => Objects\ProductStocks::class,
+			'order'   => ['i17_kodas_ps','i17_kodas_is','i17_kodas_us_a','i17_kodas_os','i17_serija'],
 		],
 		'GET_N08_LIST'  => [
 			'aliases' => ['getClients'],
-			'params'  => ['in:H,A', 'where'],
+			'params'  => ['get', 'where'],
 			'map'     => Objects\Client::class,
+			'order'   => ['n08_kodas_ks'],
 		],
 		'GET_N17_LIST'  => [
 			'aliases' => ['getProducts'],
-			'params'  => ['in:H,A', 'where'],
+			'params'  => ['get', 'where'],
 			'map'     => Objects\Product::class,
+			'order'   => ['n17_kodas_ps'],
 		],
 		'GET_I33_LIST'  => [
 			'aliases' => ['getProductPrices'],
 			'params'  => ['where'],
 			'map'     => Objects\ProductPrice::class,
+			'order'   => ['i33_kodas_ps','i33_kodas_is','i33_kodas_us'],
 		],
 		'GET_I09_LIST'  => [
 			'aliases' => ['getInternalDocs'],
-			'params'  => ['in:H,A', 'where'],
+			'params'  => ['get', 'where'],
+			'map'     => Objects\InternalDoc::class,
+			'order'   => ['i09_kodas_vd'],
 		],
 		'PDF_INVOICE'   => [
 			'aliases' => ['getPDF'],
-			'params'  => ['kodas_po', 'in:RO,PO', 'in:LT,EN', 'pdf_rep'],
+			'params'  => ['kodas_po', 'module', 'language', 'pdf_rep'],
 		],
 		'GET_N64_LIST'  => [
 			'aliases' => ['getLoyaltyCards'],
 			'params'  => ['where'],
+			'map'     => Objects\LoyaltyCard::class,
+			'order'   => ['n64_kodas_dl'],
 		],
 		'GET_I64_LIST'  => [
 			'aliases' => ['getLoyaltyPoints'],
 			'params'  => ['where'],
+			'map'     => Objects\LoyaltyOperation::class,
+			'order'   => ['i64_kodas_dl'],
 		],
 		'EDIT_N64'      => [
 			'aliases' => ['editLoyaltyCards'],
-			'params'  => ['in:I,U,D', 'xml:n64'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\LoyaltyCard::class,
 		],
 		'EDIT_I64'      => [
 			'aliases' => ['editLoyaltyPoints'],
-			'params'  => ['in:I,U,D', 'xml:i64'],
+			'params'  => ['edit', 'xml'],
+			'map'     => Objects\LoyaltyOperation::class,
 		],
 		'GET_N32_LIST'  => [
 			'aliases' => ['getPriceLists'],
 			'params'  => ['where'],
 			'map'     => Objects\PriceList::class,
+			'order'   => ['n32_kodas_ps','n32_kodas_us','n32_tipas,n32_g_date','n32_id'],
 		],
 		'GET_N26_LIST'  => [
-			'aliases' => ['getCompoundProducts'],
+			'aliases' => ['getProductComponents'],
 			'params'  => ['where'],
+			'map'     => Objects\ProductComponent::class,
+			'order'   => ['n26_kodas_ps','n26_eil_nr'],
 		],
 		'GET_N37_LIST'  => [
 			'aliases' => ['getBarcode'],
-			'params'  => ['barcode', 'in:H,A', 'where'],
+			'params'  => ['barcode', 'get', 'where'],
 			'map'     => Objects\BarCode::class,
+			'order'   => ['n37_kodas_ps','n37_kodas_us'],
 		],
 		'GET_N13_LIST'  => [
-			'aliases' => ['getDiscounts'],
+			'aliases' => ['getProdDiscounts'],
 			'params'  => ['where'],
+			'map'     => Objects\ProdDiscount::class,
+			'order'   => ['n13_kodas_ps','n13_kodas_us','n13_kodas_is','n13_eil_nr'],
 		],
 		'GET_T03_LIST'  => [
-			'aliases' => ['getCompoundDebts'],
-			'params'  => ['in:H,A', 'where'],
+			'aliases' => ['getDebtTotals'],
+			'params'  => ['get', 'where'],
+			'map'     => Objects\DebtTotal::class,
+			'order'   => ['t03_kodas_ks'],
 		],
 		'GET_I44_LIST'  => [
 			'aliases' => ['getDebts'],
-			'params'  => ['in:H,A', 'where'],
+			'params'  => ['get', 'where'],
+			'map'     => Objects\Debt::class,
+			'order'   => ['i44_modul','i44_kodas_op','i44_eil_nr','i44_tipas'],
 		],
 		'GET_I04_LIST'  => [
 			'aliases' => ['getCashFlows'],
-			'params'  => ['in:H,A', 'where'],
+			'params'  => ['get', 'where'],
+			'map'     => Objects\CashFlow::class,
+			'order'   => ['i04_kodas_ch'],
 		],
 		'GET_N87_LIST'  => [
 			'aliases' => ['getClientProducts'],
 			'params'  => ['where'],
+			'map'     => Objects\ClientProd::class,
+			'order'   => ['n87_kodas_ps','n87_kodas_us','n87_kodas_ks'],
 		],
 		'GET_N31_LIST'  => [
 			'aliases' => ['getDiscountTables'],
 			'params'  => ['where'],
+			'map'     => Objects\DiscountTable::class,
+			'order'   => ['n31_kodas_ns','n31_eil_nr'],
 		],
 		'GET_PRICE'     => [
 			'aliases' => ['getPrice'],
-			'params'  => ['kodas_ps', 'kodas_us', 'kodas_os', 'serija', 'kodas_is', 'numeric', 'kodas_ks', 'in:1,2,3', 'in:1,2'],
+			'params'  => ['kodas_ps', 'kodas_us', 'kodas_os', 'serija', 'kodas_is', 'kiekis', 'kodas_ks', 'ps_tip', 'op_tip'],
 		],
 		'GET_I06_DEBT'  => [
 			'aliases' => ['getInvoiceDebt'],
-			'params'  => ['in:H,A', 'where'],
+			'params'  => ['get', 'where'],
+			'map'     => Objects\Invoice::class,
+			'order'   => ['i06_kodas_ks'],
 		],
 		'GET_USER_PROC' => [
 			'aliases' => ['getProc'],
@@ -186,9 +239,20 @@ class RivileInterface {
 		return array_get($this->inverseAliases(), $alias);
 	}
 
+	public function getMethodDef ($name) {
+		if (isset($this->method_definitions[strtoupper($name)])) {
+			$method = $name;
+		} else if ($method = $this->findMethodByAlias($name)) {
+			$method = $method;
+		} else {
+			throw new RivileInvalidMethod;
+		}
+		return $this->method_definitions[$method];
+	}
+
 	protected function _Soap () {
 		if (is_null($this->soapclient)) {
-			$this->soapclient = new SoapClient($this->wsdl_url);
+			$this->soapclient = new SoapClient($this->wsdl_url, ['trace' => 1]);
 		}
 		return $this->soapclient;
 	}
@@ -199,7 +263,7 @@ class RivileInterface {
 		for ($i=0; $i<count($params_list); $i++) {
 			$call_params[] = isset($params[$i]) ? $params[$i] : '';
 		}
-		$response = call_user_func_array(array($this->_Soap(), $method), $call_params);
+		$response = $this->_Soap()->__soapCall($method, $call_params);
 		return object2array(simplexml_load_string($response));
 	}
 
