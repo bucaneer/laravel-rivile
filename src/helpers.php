@@ -19,3 +19,7 @@ function object2array($arrObjData, $arrSkipIndices = array()) {
 	}
 	return $arrData;
 }
+
+function query_result ($items, $query) {
+	return new ITCity\Rivile\QueryResult($items, $query);
+}
