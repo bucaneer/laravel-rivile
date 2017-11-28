@@ -42,4 +42,8 @@ class CashFlow extends Object {
 		'i04_kodas_zn' => ['string', 'max:12'],
 		'i04_busena' => ['integer', 'max:999'],
 	];
+
+	protected static $relation_map = [
+		'i05' => ['name' => 'details', 'class' => CashFlowDetail::class],
+	];
 }
