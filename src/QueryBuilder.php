@@ -12,6 +12,7 @@ use SoapVar;
 class QueryBuilder extends Builder {
 	protected $method_params = [];
 	public $rivile_object;
+	public $raw_output = false;
 
 	public function __construct($object, $connection = null, $grammar = null, $processor = null) {
 		if ($connection == null) $connection = new Connection(null);
@@ -32,13 +33,18 @@ class QueryBuilder extends Builder {
 
 	public function edit ($edit = null, $xml = null) {
 		$interface = new RivileInterface;
+		$interface->raw_output = true;
 		$xml = '<xml_info><![CDATA['.$xml.']]></xml_info>';
 		$xml = new SoapVar($xml, XSD_ANYXML);
 		return $interface->{$this->getEditMethod()}(compact('edit', 'xml'));
 	}
 
+	public function findQuery ($value) {
+		return $this->where($this->rivile_object::getPrimaryKey(), $value);
+	}
+
 	public function find ($value, $columns = null) {
-		return $this->where($this->rivile_object::getPrimaryKey(), $value)->get()->first();
+		return $this->findQuery($value)->get()->first();
 	}
 
 	public function bind ($param, $value = null) {
@@ -57,7 +63,13 @@ class QueryBuilder extends Builder {
 	public function get ($param = null) {
 		$this->bind('where', $this->toSql());
 		$interface = new RivileInterface;
-		return query_result($interface->{$this->getQueryMethod()}($this->method_params), $this);
+		$interface->raw_output = $this->raw_output;
+		$raw = $interface->{$this->getQueryMethod()}($this->method_params);
+		if ($this->raw_output) {
+			return $raw;
+		} else {
+			return query_result($raw, $this);
+		}
 	}
 
 	public function update (array $values = []) {

@@ -21,6 +21,8 @@ class RivileInterface {
 		'module' => 'in:RO,PO',
 	];
 
+	public $raw_output = false;
+
 	protected $method_definitions = [
 		'EDIT_I06'      => [
 			'aliases' => ['editInvoice'],
@@ -278,6 +280,9 @@ class RivileInterface {
 		}
 		$definition = $this->method_definitions[$method];
 
+		/**
+		 * Method called with array argument - map named parameters.
+		 */
 		if (isset($arguments[0]) && is_array($arguments[0])) {
 			$param_map = $arguments[0];
 			$param_defs = $definition['params'];
@@ -291,14 +296,20 @@ class RivileInterface {
 		}
 
 		$raw = $this->_soapMethod($method, $arguments);
+
 		reset($raw);
 		if(key($raw) == 'ERROR') {
 			throw new Exceptions\RivileSoapError(print_r(current($raw), true));
 		}
+
 		$root = array_first($raw);
+		if ($this->raw_output) {
+			return $root;
+		}
 		if (!isset($root[0])) {
 			$root = [$root];
 		}
+
 		if (isset($definition['map'])) {
 			$map = $definition['map'];
 			return $map::fromList($root);

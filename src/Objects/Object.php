@@ -134,6 +134,22 @@ class Object extends Model{
 		return (new static)->newFromBuilder(array_change_key_case($raw_data));
 	}
 
+	public function fillFromBuilder($attributes = []) {
+        $this->setRawAttributes(array_change_key_case((array) $attributes), true);
+
+        $this->fireModelEvent('retrieved', false);
+
+        return $this;
+    }
+
+    public function refresh() {
+    	$query = $this->newQueryWithoutScopes();
+    	$query->raw_output = true;
+    	$res = $query->where($this->getPrimaryKey(), $this->getKey())->get();
+    	$this->fillFromBuilder($res);
+    	return $this;
+    }
+
 	public static function fromList ($list) {
 		$out = collect();
 		foreach ($list as $item) {
@@ -176,7 +192,9 @@ class Object extends Model{
             $this->finishSave($options);
         }
 
-        return $saved;
+        $this->fillFromBuilder($saved);
+
+        return $this;
     }
 
     public function delete()
