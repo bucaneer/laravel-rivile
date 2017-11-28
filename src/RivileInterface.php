@@ -116,6 +116,7 @@ class RivileInterface {
 		'PDF_INVOICE'   => [
 			'aliases' => ['getPDF'],
 			'params'  => ['kodas_po', 'module', 'language', 'pdf_rep'],
+			'map'     => Objects\InvoicePDF::class,
 		],
 		'GET_N64_LIST'  => [
 			'aliases' => ['getLoyaltyCards'],
