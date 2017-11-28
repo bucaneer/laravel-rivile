@@ -31,10 +31,10 @@ class Object extends Model{
 			$attributes = $object->getAttributes();
 			foreach ((array) $object::$relation_map as $key => $def) {
 				if (isset($attributes[$key])) {
-					if (array_get($def, 'single')) {
-						$relation = $def['class']::instantiate($attributes[$key]);
-					} else {
+					if (isset($attributes[$key][0])) {
 						$relation = $def['class']::fromList($attributes[$key]);
+					} else {
+						$relation = $def['class']::instantiate($attributes[$key]);
 					}
 					$object->setRelation($def['name'], $relation);
 					unset($object->$key);

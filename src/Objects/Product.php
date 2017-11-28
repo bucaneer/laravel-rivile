@@ -109,7 +109,7 @@ class Product extends Object {
 	];
 
 	protected static $relation_map = [
-		'i33' => ['name' => 'price', 'class' => ProductPrice::class, 'single' => true],
-		'n37' => ['name' => 'barCode', 'class' => BarCode::class, 'single' => true],
+		'i33' => ['name' => 'price', 'class' => ProductPrice::class],
+		'n37' => ['name' => 'barCode', 'class' => BarCode::class],
 	];
 }
