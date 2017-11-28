@@ -28,6 +28,7 @@ class Product extends Object {
 		'n17_kodas_ls_2' => ['string', 'max:12'],
 		'n17_kodas_ls_3' => ['string', 'max:12'],
 		'n17_kodas_ls_4' => ['string', 'max:12'],
+		'n17_kodas_ds' => ['string', 'max:12'],
 		'n17_nuol_gr' => ['string', 'max:6'],
 		'n17_galioja' => ['numeric', 'max:99999'],
 		'n17_mokestis' => ['boolean'],
