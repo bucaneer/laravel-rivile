@@ -35,7 +35,7 @@ class Object extends Model{
 					if (isset($attributes[$key][0])) {
 						$relation = $def['class']::fromList($attributes[$key]);
 					} else {
-						$relation = $def['class']::instantiate($attributes[$key]);
+						$relation = collect([$def['class']::instantiate($attributes[$key])]);
 					}
 					$object->setRelation($def['name'], $relation);
 					unset($object->$key);
