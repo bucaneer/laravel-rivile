@@ -5,6 +5,8 @@ namespace ITCity\Rivile\Objects;
 class Invoice extends Object {
 	protected static $prefix = 'I06';
 
+	protected static $primary_key = 'i06_kodas_po';
+
 	protected static $defs = [
 		'i06_kodas_po' => ['string', 'max:12'],
 		'i06_op_tip' => ['integer', 'in:1,2,3,4,51,52,53,54,55,56'],
@@ -64,4 +66,5 @@ class Invoice extends Object {
 		'i08' => ['name' => 'delays',   'class' => InvoiceDelay::class],
 		'i09' => ['name' => 'payments', 'class' => InvoicePayment::class],
 	];
+	protected static $relation_key = 'kodas_po';
 }

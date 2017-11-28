@@ -16,6 +16,7 @@ class Object extends Model{
 	protected static $query_method;
 	protected static $defs;
 	protected static $relation_map;
+	protected static $relation_key;
 
 	protected $dateFormat = "Y-m-d H:i:s.u";
 	protected $table = '';
@@ -203,7 +204,11 @@ class Object extends Model{
 
     public function __call ($method, $parameters) {
     	if ($class = array_get($this->getRelationNames(), $method)) {
-    		return new $class;
+    		$new_rel = new $class;
+    		if (isset(static::$relation_key)) {
+    			$new_rel->{static::$relation_key} = $this->{static::$relation_key};
+    		}
+    		return $new_rel;
     	}
     	return parent::__call($method, $parameters);
     }
