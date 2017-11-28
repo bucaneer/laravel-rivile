@@ -64,7 +64,7 @@ class QueryResult extends Collection {
 		return $merge;
 	}
 
-	public function all() {
+	public function loadAll() {
 		$all = $this;
 		while ($all->hasMore()) {
 			$all = $all->more();
