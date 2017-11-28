@@ -179,6 +179,38 @@ class Object extends Model{
         return $saved;
     }
 
+    public function delete()
+    {
+        if (is_null($this->getKeyName())) {
+            throw new Exception('No primary key defined on model.');
+        }
+
+        if ($this->fireModelEvent('deleting') === false) {
+            return false;
+        }
+
+        // Here, we'll touch the owning models, verifying these timestamps get updated
+        // for the models. This will allow any caching to get broken on the parents
+        // by the timestamp. Then we will go ahead and delete the model instance.
+        $this->touchOwners();
+
+        $this->performDeleteOnModel();
+
+        // Once the model has been deleted, we will fire off the deleted event so that
+        // the developers may hook into post-delete operations. We will then return
+        // a boolean true as the delete is presumably successful on the database.
+        $this->fireModelEvent('deleted', false);
+
+        return true;
+    }
+
+    protected function performDeleteOnModel()
+    {
+        $this->newQueryWithoutScopes()->delete();
+
+        $this->exists = false;
+    }
+
 	public function toXml () {
 		$simple_xml = array_to_xml($this->attributesToArray(), new SimpleXMLElement('<'.static::$prefix.' />'));
 		$dom = dom_import_simplexml($simple_xml);
