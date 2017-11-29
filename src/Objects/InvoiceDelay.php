@@ -5,6 +5,8 @@ namespace ITCity\Rivile\Objects;
 class InvoiceDelay extends Object {
 	protected static $prefix = 'I08';
 
+	protected static $primary_key = ['i08_kodas_po', 'i08_eil_nr'];
+
 	protected static $defs = [
 		'i08_kodas_po' => ['string', 'max:12'],
 		'i08_eil_nr' => ['integer', 'max:999999'],

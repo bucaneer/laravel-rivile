@@ -39,8 +39,17 @@ class QueryBuilder extends Builder {
 		return $interface->{$this->getEditMethod()}(compact('edit', 'xml'));
 	}
 
-	public function findQuery ($value) {
-		return $this->where($this->rivile_object::getPrimaryKey(), $value);
+	public function findQuery ($values) {
+		$primary = array_values(array_wrap($this->rivile_object::getPrimaryKey()));
+		$values = array_values(array_wrap($value));
+		if (count($value) !== count($primary)) {
+			throw new RivileMalformedWhere('Find for '.get_class($this->rivile_object).' needs '.count($primary).' values, '.count($value).' given.');
+		}
+		foreach ($primary as $i => $key) {
+			$value = $values[$i];
+			$this->where($key, $value);
+		}
+		return $this;
 	}
 
 	public function find ($value, $columns = null) {
