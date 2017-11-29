@@ -79,4 +79,8 @@ class Client extends Object {
 		'n08_suma_wk' => ['numeric', 'max:9999999999.99'],
 		'n08_kodas_vl_u' => ['string', 'max:12'],
 	];
+
+	protected static $relation_map = [
+		'n33_kban' => ['name' => 'details', 'class' => ClientDetails::class],
+	];
 }
