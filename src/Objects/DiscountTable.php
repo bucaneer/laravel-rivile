@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class DiscountTable extends Objects {
+class DiscountTable extends Object {
 	protected static $prefix = 'N31';
 
 	protected static $defs = [
