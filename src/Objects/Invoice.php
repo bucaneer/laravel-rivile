@@ -67,4 +67,10 @@ class Invoice extends Object {
 		'i09' => ['name' => 'payments', 'class' => InvoicePayment::class],
 	];
 	protected static $relation_key = 'kodas_po';
+
+	protected static $insert_reqs = [
+		'i06_op_tip',
+		'i06_kodas_ks',
+		'i06_kodas_xs',
+	];
 }

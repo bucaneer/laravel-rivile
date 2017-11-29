@@ -19,4 +19,8 @@ class InvoiceDelay extends Object {
 		'i08_mok_s' => ['numeric', 'max:9999999999.99'],
 		'i08_plk_p' => ['numeric', 'max:99999.99999'],
 	];
+
+	protected static $insert_reqs = [
+		'i08_kodas_po',
+	];
 }

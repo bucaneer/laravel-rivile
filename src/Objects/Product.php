@@ -113,4 +113,10 @@ class Product extends Object {
 		'i33' => ['name' => 'price', 'class' => ProductPrice::class],
 		'n37' => ['name' => 'barCode', 'class' => BarCode::class],
 	];
+
+	protected static $insert_reqs = [
+		'n17_kodas_ps',
+		'n17_kodas_ds',
+		'n17_kodas_us',
+	];
 }
