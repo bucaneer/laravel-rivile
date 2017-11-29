@@ -22,7 +22,7 @@ class Rivile {
 		'invoicePDF' => Objects\InvoicePDF::class,
 		'loyaltyCard' => Objects\LoyaltyCard::class,
 		'loyaltyOperation' => Objects\LoyaltyOperation::class,
-		'priceList' => Objects\priceList::class,
+		'priceList' => Objects\PriceList::class,
 		'prodDiscount' => Objects\ProdDiscount::class,
 		'product' => Objects\Product::class,
 		'productComponent' => Objects\ProductComponent::class,
