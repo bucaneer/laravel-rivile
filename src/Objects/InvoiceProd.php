@@ -2,6 +2,8 @@
 
 namespace ITCity\Rivile\Objects;
 
+use ITCity\Rivile\Exceptions\RivileInvalidObject;
+
 class InvoiceProd extends Object {
 	protected static $prefix = 'I07';
 
@@ -88,4 +90,24 @@ class InvoiceProd extends Object {
 		'i07_pvm',
 		'kiekis_a',
 	];
+
+	public function fromProd ($reference) {
+		$product = null;
+		if ($reference instanceof Product) {
+			$product = $reference;
+		} else if (is_string($reference)) {
+			$product = (new Product)->setConnection($this->getConnectionName())->find($reference);
+		}
+		if (!($product instanceof Product)) {
+			throw new RivileInvalidObject;
+		}
+
+		$copy_attrs = ['tipas' => null, 'kodas' => 'kodas_ps', 'pav' => null, 'kodas_us' => null];
+		foreach ($copy_attrs as $this_attr => $prod_attr) {
+			$prod_attr = $prod_attr ?: $this_attr;
+			$this->{$this_attr} = $product->{$prod_attr};
+		}
+
+		return $this;
+	}
 }
