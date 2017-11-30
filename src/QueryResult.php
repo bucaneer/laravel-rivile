@@ -20,7 +20,7 @@ class QueryResult extends Collection {
 
 	public function nextQuery() {
 		if (!isset($this->query)) return null;
-		$interface = new RivileInterface;
+		$interface = $this->query->getInterface();
 		$method_def = $interface->getMethodDef($this->query->getQueryMethod());
 		if (!isset($method_def['order'])) return null;
 		$order_cols = $method_def['order'];

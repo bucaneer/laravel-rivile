@@ -9,12 +9,12 @@ class InvoicePDF extends Object {
 
 	public $pdf_bin;
 
-	public static function fromList($list) {
-		return [static::instantiate($list)];
+	public function fromList($list) {
+		return [$this->instantiate($list)];
 	}
 
-	public static function instantiate($item) {
-		$invoice_pdf = new static;
+	public function instantiate($item) {
+		$invoice_pdf = $this->newInstance();
 		$invoice_pdf->pdf_bin = base64_decode($item);
 		return $invoice_pdf;
 	}

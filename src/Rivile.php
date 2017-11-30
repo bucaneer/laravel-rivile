@@ -2,7 +2,11 @@
 
 namespace ITCity\Rivile;
 
+use ITCity\Rivile\Exceptions\RivileMissingKey;
+
 class Rivile {
+	public $key;
+
 	protected static $method_map = [
 		'barCode' => Objects\BarCode::class,
 		'cashFlow' => Objects\CashFlow::class,
@@ -30,9 +34,23 @@ class Rivile {
 		'productStocks' => Objects\ProductStocks::class,
 	];
 
-	public static function __callStatic ($method, $parameters) {
+	public function __construct ($key = null) {
+		if ($key) {
+			$this->key = $key;
+		} else {
+			$this->key = env('RIVILE_KEY');
+		}
+
+		if (!$this->key) {
+			throw new RivileMissingKey;
+		}
+	}
+
+	public function __call ($method, $parameters) {
 		if ($class = array_get(static::$method_map, camel_case($method))) {
-			return new $class($parameters);
+			return (new $class($parameters))->setConnection($this->key);
+		} else {
+			throw new \BadMethodCallException("Method {$method} does not exist.");
 		}
 	}
 }

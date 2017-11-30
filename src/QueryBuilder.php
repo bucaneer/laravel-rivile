@@ -32,7 +32,7 @@ class QueryBuilder extends Builder {
 	}
 
 	public function edit ($edit = null, $xml = null) {
-		$interface = new RivileInterface;
+		$interface = $this->getInterface();
 		$interface->raw_output = true;
 		$xml = '<xml_info><![CDATA['.$xml.']]></xml_info>';
 		$xml = new SoapVar($xml, XSD_ANYXML);
@@ -71,7 +71,7 @@ class QueryBuilder extends Builder {
 
 	public function get ($param = null) {
 		$this->bind('where', $this->toSql());
-		$interface = new RivileInterface;
+		$interface = $this->getInterface();
 		$interface->raw_output = $this->raw_output;
 		$raw = $interface->{$this->getQueryMethod()}($this->method_params);
 		if ($this->raw_output) {
@@ -99,6 +99,10 @@ class QueryBuilder extends Builder {
 
 	public function getEditMethod () {
 		return $this->rivile_object::getEditMethod();
+	}
+
+	public function getInterface () {
+		return $this->rivile_object->getConnection();
 	}
 
 	public function newQuery() {

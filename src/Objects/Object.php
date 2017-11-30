@@ -5,6 +5,7 @@ namespace ITCity\Rivile\Objects;
 use ITCity\Rivile\Exceptions\RivileInvalidAttribute;
 use ITCity\Rivile\Exceptions\RivileInvalidObject;
 use ITCity\Rivile\QueryBuilder;
+use ITCity\Rivile\RivileInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use SimpleXMLElement;
@@ -32,10 +33,11 @@ class Object extends Model{
 			$attributes = $object->getAttributes();
 			foreach ((array) $object::$relation_map as $key => $def) {
 				if (isset($attributes[$key])) {
+					$rel_object = (new $def['class'])->setConnection($object->getConnectionName());
 					if (isset($attributes[$key][0])) {
-						$relation = $def['class']::fromList($attributes[$key]);
+						$relation = $rel_object->fromList($attributes[$key]);
 					} else {
-						$relation = collect([$def['class']::instantiate($attributes[$key])]);
+						$relation = collect([$rel_object->instantiate($attributes[$key])]);
 					}
 					$object->setRelation($def['name'], $relation);
 					unset($object->$key);
@@ -132,8 +134,16 @@ class Object extends Model{
 		return new QueryBuilder($this);
 	}
 
-	public static function instantiate ($raw_data) {
-		return (new static)->newFromBuilder(array_change_key_case($raw_data));
+	/**
+	 * Terrible hack: we store Rivile key as the model's connection name
+	 * and get the appropriate RivileInterface with getConnection().
+	 */
+	public function getConnection() {
+		return new RivileInterface($this->getConnectionName());
+	}
+
+	public function instantiate ($raw_data) {
+		return $this->newInstance()->newFromBuilder(array_change_key_case($raw_data));
 	}
 
 	public function fillFromBuilder($attributes = []) {
@@ -152,11 +162,11 @@ class Object extends Model{
     	return $this;
     }
 
-	public static function fromList ($list) {
+	public function fromList ($list) {
 		$out = collect();
 		foreach ($list as $item) {
 			if (!$item) continue;
-			$out->push(static::instantiate($item));
+			$out->push($this->instantiate($item));
 		}
 		return $out;
 	}
@@ -256,7 +266,7 @@ class Object extends Model{
 
     public function __call ($method, $parameters) {
     	if ($class = array_get($this->getRelationNames(), $method)) {
-    		$new_rel = new $class;
+    		$new_rel = (new $class)->setConnection($this->getConnectionName());
     		if (isset(static::$relation_key)) {
     			$new_rel->{static::$relation_key} = $this->{static::$relation_key};
     		}

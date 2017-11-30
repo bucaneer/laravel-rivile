@@ -326,8 +326,8 @@ class RivileInterface {
 		}
 
 		if (isset($definition['map'])) {
-			$map = $definition['map'];
-			return $map::fromList($root);
+			$map = (new $definition['map'])->setConnection($this->key);
+			return $map->fromList($root);
 		} else {
 			return collect($root);
 		}
