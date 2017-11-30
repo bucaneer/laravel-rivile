@@ -81,6 +81,6 @@ class Client extends Object {
 	];
 
 	protected static $relation_map = [
-		'n33_kban' => ['name' => 'details', 'class' => ClientDetails::class],
+		'n33' => ['name' => 'details', 'class' => ClientDetails::class],
 	];
 }

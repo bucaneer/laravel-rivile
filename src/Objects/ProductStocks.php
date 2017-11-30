@@ -30,5 +30,7 @@ class ProductStocks extends Object {
 		'i17_useris' => ['string', 'max:12'],
 		'i17_addusr' => ['string', 'max:12'],
 		'i17_r_date' => ['date'],
+		'likutis_us' => ['numeric'],
+		'likutis_us_a' => ['numeric'],
 	];
 }

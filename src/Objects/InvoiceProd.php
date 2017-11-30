@@ -73,6 +73,8 @@ class InvoiceProd extends Object {
 		'i07_aprasymas2' => ['string', 'max:150'],
 		'i07_aprasymas3' => ['string', 'max:150'],
 		'i07_kodas_kl' => ['string', 'max:12'],
+		'kiekis_a' => ['numeric', 'max:99999999.9999'],
+		'bar_kodas' => ['string', 'max:12'],
 	];
 
 	protected static $insert_reqs = [

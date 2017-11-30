@@ -64,7 +64,7 @@ class Invoice extends Object {
 	protected static $relation_map = [
 		'i07' => ['name' => 'products', 'class' => InvoiceProd::class],
 		'i08' => ['name' => 'delays',   'class' => InvoiceDelay::class],
-		'i09' => ['name' => 'payments', 'class' => InvoicePayment::class],
+		'i13' => ['name' => 'payments', 'class' => InvoicePayment::class],
 	];
 	protected static $relation_key = 'kodas_po';
 
