@@ -41,9 +41,9 @@ class QueryBuilder extends Builder {
 
 	public function findQuery ($values) {
 		$primary = array_values(array_wrap($this->rivile_object::getPrimaryKey()));
-		$values = array_values(array_wrap($value));
-		if (count($value) !== count($primary)) {
-			throw new RivileMalformedWhere('Find for '.get_class($this->rivile_object).' needs '.count($primary).' values, '.count($value).' given.');
+		$values = array_values(array_wrap($values));
+		if (count($values) !== count($primary)) {
+			throw new RivileMalformedWhere('Find for '.get_class($this->rivile_object).' needs '.count($primary).' values, '.count($values).' given.');
 		}
 		foreach ($primary as $i => $key) {
 			$value = $values[$i];
