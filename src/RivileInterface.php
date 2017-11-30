@@ -11,6 +11,9 @@ class RivileInterface {
 	protected $wsdl_url = 'http://manorivile.lt/WEBSERVICE_RIV_WEB/awws/webservice.awws?wsdl';
 	protected $soapclient;
 
+	protected $retryCount = 0;
+	protected $retryLimit = 1;
+
 	protected $param_validation = [
 		'edit' => 'in:I,U,D',
 		'get' => 'in:H,A',
@@ -266,7 +269,19 @@ class RivileInterface {
 		for ($i=0; $i<count($params_list); $i++) {
 			$call_params[] = isset($params[$i]) ? $params[$i] : '';
 		}
-		$response = $this->_Soap()->__soapCall($method, $call_params);
+		try {
+			$response = $this->_Soap()->__soapCall($method, $call_params);
+		} catch (\SoapFault $e) {
+			if ($this->retryCount < $this->retryLimit) {
+				// Try to re-initialize SoapClient
+				$this->soapclient = null;
+				$this->retryCount++;
+				return $this->_soapMethod($method, $params);
+			} else {
+				throw $e;
+			}
+		}
+		$this->retryCount = 0;
 		return object2array(simplexml_load_string($response));
 	}
 
