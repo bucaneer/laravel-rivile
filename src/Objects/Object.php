@@ -39,6 +39,8 @@ class Object extends Model{
 					}
 					$object->setRelation($def['name'], $relation);
 					unset($object->$key);
+				} else {
+					$object->setRelation($def['name'], collect());
 				}
 			}
 		});
