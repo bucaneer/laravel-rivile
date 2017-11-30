@@ -109,15 +109,67 @@ class QueryBuilder extends Builder {
         return new static($this->rivile_object, $this->connection, $this->grammar, $this->processor);
     }
 
-    public function count($columns = '*') {
-    	return null;
+    protected function __missingMethod() {
+    	throw new \BadMethodCallException();
     }
 
-    public function select($columns = '*') {
-    	return $this;
-    }
-
-    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null) {
-    	return null;
-    }
+    /**
+     * Public methods from parent that are not implemented here.
+     */
+    public function select($columns = ['*']) { return $this->__missingMethod(); }
+    public function selectRaw($expression, array $bindings = []) { return $this->__missingMethod(); }
+    public function selectSub($query, $as) { return $this->__missingMethod(); }
+    public function addSelect($column) { return $this->__missingMethod(); }
+    public function distinct() { return $this->__missingMethod(); }
+    public function from($table) { return $this->__missingMethod(); }
+    public function join($table, $first, $operator = null, $second = null, $type = 'inner', $where = false) { return $this->__missingMethod(); }
+    public function joinWhere($table, $first, $operator, $second, $type = 'inner') { return $this->__missingMethod(); }
+    public function leftJoin($table, $first, $operator = null, $second = null) { return $this->__missingMethod(); }
+    public function leftJoinWhere($table, $first, $operator, $second) { return $this->__missingMethod(); }
+    public function rightJoin($table, $first, $operator = null, $second = null) { return $this->__missingMethod(); }
+    public function rightJoinWhere($table, $first, $operator, $second) { return $this->__missingMethod(); }
+    public function crossJoin($table, $first = null, $operator = null, $second = null) { return $this->__missingMethod(); }
+    public function groupBy(...$groups) { return $this->__missingMethod(); }
+    public function having($column, $operator = null, $value = null, $boolean = 'and') { return $this->__missingMethod(); }
+    public function orHaving($column, $operator = null, $value = null) { return $this->__missingMethod(); }
+    public function havingRaw($sql, array $bindings = [], $boolean = 'and') { return $this->__missingMethod(); }
+    public function orHavingRaw($sql, array $bindings = []) { return $this->__missingMethod(); }
+    public function orderBy($column, $direction = 'asc') { return $this->__missingMethod(); }
+    public function orderByDesc($column) { return $this->__missingMethod(); }
+    public function latest($column = 'created_at') { return $this->__missingMethod(); }
+    public function oldest($column = 'created_at') { return $this->__missingMethod(); }
+    public function inRandomOrder($seed = '') { return $this->__missingMethod(); }
+    public function orderByRaw($sql, $bindings = []) { return $this->__missingMethod(); }
+    public function skip($value) { return $this->__missingMethod(); }
+    public function offset($value) { return $this->__missingMethod(); }
+    public function take($value) { return $this->__missingMethod(); }
+    public function limit($value) { return $this->__missingMethod(); }
+    public function forPage($page, $perPage = 15) { return $this->__missingMethod(); }
+    public function forPageAfterId($perPage = 15, $lastId = 0, $column = 'id') { return $this->__missingMethod(); }
+    public function union($query, $all = false) { return $this->__missingMethod(); }
+    public function unionAll($query) { return $this->__missingMethod(); }
+    public function lock($value = true) { return $this->__missingMethod(); }
+    public function lockForUpdate() { return $this->__missingMethod(); }
+    public function sharedLock() { return $this->__missingMethod(); }
+    public function value($column) { return $this->__missingMethod(); }
+    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null) { return $this->__missingMethod(); }
+    public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null) { return $this->__missingMethod(); }
+    public function getCountForPagination($columns = ['*']) { return $this->__missingMethod(); }
+    public function cursor() { return $this->__missingMethod(); }
+    public function chunkById($count, callable $callback, $column = 'id', $alias = null) { return $this->__missingMethod(); }
+    public function pluck($column, $key = null) { return $this->__missingMethod(); }
+    public function implode($column, $glue = '') { return $this->__missingMethod(); }
+    public function exists() { return $this->__missingMethod(); }
+    public function count($columns = '*') { return $this->__missingMethod(); }
+    public function min($column) { return $this->__missingMethod(); }
+    public function max($column) { return $this->__missingMethod(); }
+    public function sum($column) { return $this->__missingMethod(); }
+    public function avg($column) { return $this->__missingMethod(); }
+    public function average($column) { return $this->__missingMethod(); }
+    public function aggregate($function, $columns = ['*']) { return $this->__missingMethod(); }
+    public function numericAggregate($function, $columns = ['*']) { return $this->__missingMethod(); }
+    public function increment($column, $amount = 1, array $extra = []) { return $this->__missingMethod(); }
+    public function decrement($column, $amount = 1, array $extra = []) { return $this->__missingMethod(); }
+    public function truncate() { return $this->__missingMethod(); }
+    public function useWritePdo() { return $this->__missingMethod(); }
 }
