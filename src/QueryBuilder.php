@@ -81,6 +81,13 @@ class QueryBuilder extends Builder {
 		}
 	}
 
+	public function first ($columns = ['*']) {
+		if ($this->raw_output) {
+			return $this->get($columns);
+		}
+		return $this->get($columns)->first();
+	}
+
 	public function update (array $values = []) {
 		return $this->edit('U', $this->rivile_object->toXml());
 	}
@@ -172,4 +179,6 @@ class QueryBuilder extends Builder {
     public function decrement($column, $amount = 1, array $extra = []) { return $this->__missingMethod(); }
     public function truncate() { return $this->__missingMethod(); }
     public function useWritePdo() { return $this->__missingMethod(); }
+    public function chunk($count, callable $callback) { return $this->__missingMethod(); }
+    public function each(callable $callback, $count = 1000) { return $this->__missingMethod(); }
 }
