@@ -151,6 +151,8 @@ class Object extends Model{
 
         $this->fireModelEvent('retrieved', false);
 
+        $this->exists = true;
+
         return $this;
     }
 
