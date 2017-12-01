@@ -206,7 +206,7 @@ class RivileInterface {
 		'GET_I06_DEBT'  => [
 			'aliases' => ['getInvoiceDebt'],
 			'params'  => ['get', 'where'],
-			'map'     => Objects\Invoice::class,
+			'map'     => Objects\InvoiceDebt::class,
 			'order'   => ['i06_kodas_ks'],
 		],
 		'GET_USER_PROC' => [

@@ -24,6 +24,7 @@ class Rivile {
 		'invoicePayment' => Objects\InvoicePayments::class,
 		'invoiceProd' => Objects\InvoiceProd::class,
 		'invoicePDF' => Objects\InvoicePDF::class,
+		'invoiceDebt' => Objects\InvoiceDebt::class,
 		'loyaltyCard' => Objects\LoyaltyCard::class,
 		'loyaltyOperation' => Objects\LoyaltyOperation::class,
 		'priceList' => Objects\PriceList::class,
