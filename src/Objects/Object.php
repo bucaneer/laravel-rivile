@@ -338,4 +338,8 @@ class Object extends Model{
         }
     	
     }
+
+    public function rivile() {
+    	return new Rivile($this->getConnectionName());
+    }
 }
