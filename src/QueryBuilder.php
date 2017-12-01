@@ -10,10 +10,35 @@ use Illuminate\Database\Connection;
 use SoapVar;
 
 class QueryBuilder extends Builder {
+	/**
+	 * Associative array of parameters for webservice method.
+	 *
+	 * @var array
+	 */
 	protected $method_params = [];
+
+	/**
+	 * Associated Object instance.
+	 *
+	 * @var ITCity\Rivile\Objects\Object
+	 */
 	public $rivile_object;
+
+	/**
+	 * Indicates if results should be output as raw unmapped array.
+	 *
+	 * @var bool
+	 */
 	public $raw_output = false;
 
+	/**
+	 * Create new QueryBuilder instance.
+	 *
+	 * @param \ITCity\Rivile\Objects\Object $object
+	 * @param \Illuminate\Database\ConnectionInterface  $connection
+	 * @param \Illuminate\Database\Query\Grammars\Grammar  $grammar
+	 * @param \Illuminate\Database\Query\Processors\Processor  $processor
+	 */
 	public function __construct($object, $connection = null, $grammar = null, $processor = null) {
 		if ($connection == null) $connection = new Connection(null);
 		if ($grammar == null) $grammar = new QueryGrammar;
@@ -21,6 +46,11 @@ class QueryBuilder extends Builder {
 		parent::__construct($connection, $grammar, $processor);
 	}
 
+	/**
+	 * Construct an SQL where clause string for passing to webservice.
+	 *
+	 * @return string
+	 */
 	public function toSql() {
 		$query_string = (new QueryGrammar)->whereString($this);
 		$processed_query = str_replace('?', "'%s'", $query_string);
@@ -31,6 +61,13 @@ class QueryBuilder extends Builder {
 		return sprintf(...$args);
 	}
 
+	/**
+	 * Execute an edit method on the associated object via webservice.
+	 *
+	 * @param string $edit One of 'I' (insert), 'U' (update) or 'D' (delete)
+	 * @param string $xml
+	 * @return mixed
+	 */
 	public function edit ($edit = null, $xml = null) {
 		$interface = $this->getInterface();
 		$interface->raw_output = true;
@@ -39,6 +76,12 @@ class QueryBuilder extends Builder {
 		return $interface->{$this->getEditMethod()}(compact('edit', 'xml'));
 	}
 
+	/**
+	 * Setup a 'find' query based on object primary key(s).
+	 *
+	 * @param mixed $values
+	 * @return $this
+	 */
 	public function findQuery ($values) {
 		$primary = array_values(array_wrap($this->rivile_object::getPrimaryKey()));
 		$values = array_values(array_wrap($values));
@@ -52,10 +95,24 @@ class QueryBuilder extends Builder {
 		return $this;
 	}
 
+	/**
+	 * Execute a query for a single record by primary key(s).
+	 *
+	 * @param mixed $value
+	 * @param array $columns
+	 * @return mixed
+	 */
 	public function find ($value, $columns = null) {
 		return $this->findQuery($value)->get()->first();
 	}
 
+	/**
+	 * Bind named parameter(s) for the webservice method.
+	 *
+	 * @param string|array $param
+	 * @param mixed $value
+	 * @return $this
+	 */
 	public function bind ($param, $value = null) {
 		if (is_array($param)) {
 			foreach ($param as $key => $val) {
@@ -69,6 +126,12 @@ class QueryBuilder extends Builder {
 		return $this;
 	}
 
+	/**
+	 * Execute a get method via webservice.
+	 *
+	 * @param mixed $param
+	 * @return mixed
+	 */
 	public function get ($param = null) {
 		$this->bind('where', $this->toSql());
 		$interface = $this->getInterface();
@@ -81,6 +144,12 @@ class QueryBuilder extends Builder {
 		}
 	}
 
+	/**
+	 * Execute a get method and return the first result.
+	 *
+	 * @param array $columns
+	 * @return mixed
+	 */
 	public function first ($columns = ['*']) {
 		if ($this->raw_output) {
 			return $this->get($columns);
@@ -88,34 +157,77 @@ class QueryBuilder extends Builder {
 		return $this->get($columns)->first();
 	}
 
+	/**
+	 * Execute an update query on the associated object via webservice.
+	 *
+	 * @param array $values
+	 * @return mixed
+	 */
 	public function update (array $values = []) {
 		return $this->edit('U', $this->rivile_object->toXml());
 	}
 
+	/**
+	 * Execute an insert query on the associated object via webservice.
+	 *
+	 * @param array $values
+	 * @return mixed
+	 */
 	public function insert (array $values = []) {
 		return $this->edit('I', $this->rivile_object->toXml());
 	}
 
+	/**
+	 * Execute a delete query on the associated object via webservice.
+	 *
+	 * @param array $values
+	 * @return mixed
+	 */
 	public function delete ($id = null) {
 		return $this->edit('D', $this->rivile_object->toXml());
 	}
 
+	/**
+	 * Get the associated get query method name.
+	 *
+	 * @return string|null
+	 */
 	public function getQueryMethod () {
 		return $this->rivile_object::getQueryMethod();
 	}
 
+	/**
+	 * Get the associated edit query method name.
+	 *
+	 * @return string|null
+	 */
 	public function getEditMethod () {
 		return $this->rivile_object::getEditMethod();
 	}
 
+	/**
+	 * Get a RivileInterface instance.
+	 *
+	 * @return \ITCity\Rivile\RivileInterface
+	 */
 	public function getInterface () {
 		return $this->rivile_object->getConnection();
 	}
 
+	/**
+	 * Get a new instance of the query builder.
+	 *
+	 * @return \ITCity\Rivile\QueryBuilder
+	 */
 	public function newQuery() {
         return new static($this->rivile_object, $this->connection, $this->grammar, $this->processor);
     }
 
+    /**
+     * Block inherited methods.
+     *
+     * @throws \BadMethodCallException
+     */
     protected function __missingMethod() {
     	throw new \BadMethodCallException();
     }

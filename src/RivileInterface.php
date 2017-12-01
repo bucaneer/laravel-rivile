@@ -6,14 +6,121 @@ use ITCity\Rivile\Exceptions\RivileMissingKey;
 use ITCity\Rivile\Exceptions\RivileInvalidMethod;
 use SoapClient;
 
+/**
+ * SoapClient wrapper for Rivile webservice
+ *
+ * @method mixed EDIT_I06(mixed $params)
+ * @method mixed editInvoice(mixed $params)  Alias of EDIT_I06
+ * @method mixed EDIT_I07(mixed $params)
+ * @method mixed editInvoiceProds(mixed $params)  Alias of EDIT_I07
+ * @method mixed EDIT_I08(mixed $params)
+ * @method mixed editInvoiceDelays(mixed $params)  Alias of EDIT_I08
+ * @method mixed EDIT_I13(mixed $params)
+ * @method mixed editInvoicePayment(mixed $params)  Alias of EDIT_I13
+ * @method mixed EDIT_I33(mixed $params)
+ * @method mixed editProductPrice(mixed $params)  Alias of EDIT_I33
+ * @method mixed EDIT_N08(mixed $params)
+ * @method mixed editClient(mixed $params)  Alias of EDIT_N08
+ * @method mixed EDIT_N17(mixed $params)
+ * @method mixed editProduct(mixed $params)  Alias of EDIT_N17
+ * @method mixed EDIT_N33(mixed $params)
+ * @method mixed editClientDetails(mixed $params)  Alias of EDIT_N33
+ * @method mixed EDIT_N37(mixed $params)
+ * @method mixed editBarcode(mixed $params)  Alias of EDIT_N37
+ * @method mixed EDIT_I09(mixed $params)
+ * @method mixed editInternalDoc(mixed $params)  Alias of EDIT_I09
+ * @method mixed EDIT_I10(mixed $params)
+ * @method mixed editInternalDocProd(mixed $params)  Alias of EDIT_I10
+ * @method mixed GET_I06_LIST(mixed $params)
+ * @method mixed getInvoices(mixed $params)  Alias of GET_I06_LIST
+ * @method mixed GET_I17_LIST(mixed $params)
+ * @method mixed getProdStocks(mixed $params)  Alias of GET_I17_LIST
+ * @method mixed getProductStocks(mixed $params)  Alias of GET_I17_LIST
+ * @method mixed GET_N08_LIST(mixed $params)
+ * @method mixed getClients(mixed $params)  Alias of GET_N08_LIST
+ * @method mixed GET_N17_LIST(mixed $params)
+ * @method mixed getProducts(mixed $params)  Alias of GET_N17_LIST
+ * @method mixed GET_I33_LIST(mixed $params)
+ * @method mixed getProductPrices(mixed $params)  Alias of GET_I33_LIST
+ * @method mixed GET_I09_LIST(mixed $params)
+ * @method mixed getInternalDocs(mixed $params)  Alias of GET_I09_LIST
+ * @method mixed PDF_INVOICE(mixed $params)
+ * @method mixed getPDF(mixed $params)  Alias of PDF_INVOICE
+ * @method mixed GET_N64_LIST(mixed $params)
+ * @method mixed getLoyaltyCards(mixed $params)  Alias of GET_N64_LIST
+ * @method mixed GET_I64_LIST(mixed $params)
+ * @method mixed getLoyaltyPoints(mixed $params)  Alias of GET_I64_LIST
+ * @method mixed EDIT_N64(mixed $params)
+ * @method mixed editLoyaltyCards(mixed $params)  Alias of EDIT_N64
+ * @method mixed EDIT_I64(mixed $params)
+ * @method mixed editLoyaltyPoints(mixed $params)  Alias of EDIT_I64
+ * @method mixed GET_N32_LIST(mixed $params)
+ * @method mixed getPriceLists(mixed $params)  Alias of GET_N32_LIST
+ * @method mixed GET_N26_LIST(mixed $params)
+ * @method mixed getProductComponents(mixed $params)  Alias of GET_N26_LIST
+ * @method mixed GET_N37_LIST(mixed $params)
+ * @method mixed getBarcode(mixed $params)  Alias of GET_N37_LIST
+ * @method mixed GET_N13_LIST(mixed $params)
+ * @method mixed getProdDiscounts(mixed $params)  Alias of GET_N13_LIST
+ * @method mixed GET_T03_LIST(mixed $params)
+ * @method mixed getDebtTotals(mixed $params)  Alias of GET_T03_LIST
+ * @method mixed GET_I44_LIST(mixed $params)
+ * @method mixed getDebts(mixed $params)  Alias of GET_I44_LIST
+ * @method mixed GET_I04_LIST(mixed $params)
+ * @method mixed getCashFlows(mixed $params)  Alias of GET_I04_LIST
+ * @method mixed GET_N87_LIST(mixed $params)
+ * @method mixed getClientProducts(mixed $params)  Alias of GET_N87_LIST
+ * @method mixed GET_N31_LIST(mixed $params)
+ * @method mixed getDiscountTables(mixed $params)  Alias of GET_N31_LIST
+ * @method mixed GET_PRICE(mixed $params)
+ * @method mixed getPrice(mixed $params)  Alias of GET_PRICE
+ * @method mixed GET_I06_DEBT(mixed $params)
+ * @method mixed getInvoiceDebt(mixed $params)  Alias of GET_I06_DEBT
+ * @method mixed GET_USER_PROC(mixed $params)
+ * @method mixed getProc(mixed $params)  Alias of GET_USER_PROC
+ */
 class RivileInterface {
+	/**
+	 * Rivile webservice key.
+	 *
+	 * @var string
+	 */
 	protected $key;
+
+	/**
+	 * Rivile webservice URL.
+	 *
+	 * @var string
+	 */
 	protected $wsdl_url = 'http://manorivile.lt/WEBSERVICE_RIV_WEB/awws/webservice.awws?wsdl';
+
+	/**
+	 * Cached SoapClient instance.
+	 *
+	 * @var \SoapClient
+	 */
 	protected $soapclient;
 
+	/**
+	 * Number of times the current method call has been retried.
+	 *
+	 * @var int
+	 */
 	protected $retryCount = 0;
+
+	/**
+	 * Maximum number of method call retries.
+	 *
+	 * @var int
+	 */
 	protected $retryLimit = 1;
 
+	
+	/**
+	 * Validation rules for method params.
+	 *
+	 * @var array
+	 */
 	protected $param_validation = [
 		'edit' => 'in:I,U,D',
 		'get' => 'in:H,A',
@@ -24,8 +131,18 @@ class RivileInterface {
 		'module' => 'in:RO,PO',
 	];
 
+	/**
+	 * Indicates if results should be output as raw array without mapping to Objects.
+	 *
+	 * @var bool
+	 */
 	public $raw_output = false;
 
+	/**
+	 * List of webservice method definitions with aliases, param lists and mapping details.
+	 *
+	 * @var array
+	 */
 	protected $method_definitions = [
 		'EDIT_I06'      => [
 			'aliases' => ['editInvoice'],
@@ -214,8 +331,19 @@ class RivileInterface {
 			'params'  => ['proc_name', 'params'],
 		],
 	];
+
+	/**
+	 * Cache of alias-to-raw method name mappings.
+	 *
+	 * @var array
+	 */
 	protected $inverse_aliases;
 
+	/**
+	 * Create a new RivileInterface instance.
+	 *
+	 * @param null|string $key
+	 */
 	public function __construct ($key = null) {
 		if ($key) {
 			$this->key = $key;
@@ -228,6 +356,11 @@ class RivileInterface {
 		}
 	}
 
+	/**
+	 * Get alias-to-raw method name map.
+	 *
+	 * @return array
+	 */
 	protected function inverseAliases() {
 		if (!isset($this->inverse_aliases)) {
 			$inverse = [];
@@ -241,10 +374,22 @@ class RivileInterface {
 		return $this->inverse_aliases;
 	}
 
+	/**
+	 * Get raw webservice method name from an alias.
+	 *
+	 * @param string $alias
+	 * @return string
+	 */
 	protected function findMethodByAlias($alias) {
 		return array_get($this->inverseAliases(), $alias);
 	}
 
+	/**
+	 * Get webservice method definition array from any valid name.
+	 *
+	 * @param string $name
+	 * @return array
+	 */
 	public function getMethodDef ($name) {
 		if (isset($this->method_definitions[strtoupper($name)])) {
 			$method = $name;
@@ -256,13 +401,27 @@ class RivileInterface {
 		return $this->method_definitions[$method];
 	}
 
+	/**
+	 * Get a SoapClient instance.
+	 *
+	 * @return \SoapClient
+	 */
 	protected function _Soap () {
 		if (is_null($this->soapclient)) {
-			$this->soapclient = new SoapClient($this->wsdl_url, ['trace' => 1]);
+			$this->soapclient = new SoapClient($this->wsdl_url);
 		}
 		return $this->soapclient;
 	}
 	
+	/**
+	 * Call a webservice method. 
+	 * 
+	 * Returns the response converted into an array.
+	 *
+	 * @param string $method
+	 * @param array $params
+	 * @return array
+	 */
 	protected function _soapMethod ($method, $params=array()) {
 		$params_list = $this->method_definitions[$method]['params'];
 		$call_params = [$this->key];
@@ -285,6 +444,16 @@ class RivileInterface {
 		return object2array(simplexml_load_string($response));
 	}
 
+	/**
+	 * Handle dynamic method calls.
+	 *
+	 * @param string $name
+	 * @param array $arguments
+	 * @return mixed
+	 *
+	 * @throws \ITCity\Rivile\Exceptions\RivileInvalidMethod
+	 * @throws \ITCity\Rivile\Exceptions\RivileSoapError if the webservice response is an error
+	 */
 	public function __call ($name, $arguments) {
 		if (isset($this->method_definitions[strtoupper($name)])) {
 			$method = $name;
@@ -331,5 +500,16 @@ class RivileInterface {
 		} else {
 			return collect($root);
 		}
+	}
+
+	/**
+	 * Set preference for raw output of webservice responses.
+	 *
+	 * @param bool $raw
+	 * @return $this
+	 */
+	public function setRawOutput($raw) {
+		$this->raw_output = (bool) $raw;
+		return $this;
 	}
 }

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Convert an object to an associative array.
+ *
+ * @param object|array $arrObjData
+ * @param array $arrSkipIndices
+ * @return array
+ */
 function object2array($arrObjData, $arrSkipIndices = array()) {
 	$arrData = array();
 
@@ -20,10 +27,24 @@ function object2array($arrObjData, $arrSkipIndices = array()) {
 	return $arrData;
 }
 
+/**
+ * Constructor helper for QueryResult.
+ *
+ * @param mixed $items
+ * @param \ITCity\Rivile\QueryBuilder $query
+ * @return \ITCity\Rivile\QueryResult
+ */
 function query_result ($items, $query) {
 	return new ITCity\Rivile\QueryResult($items, $query);
 }
 
+/**
+ * Convert an array to SimpleXMLElement.
+ *
+ * @param array $arr
+ * @param \SimpleXMLElement $xml Root element
+ * @return \SimpleXMLElement
+ */
 function array_to_xml(array $arr, SimpleXMLElement $xml) {
     foreach ($arr as $k => $v) {
         is_array($v)

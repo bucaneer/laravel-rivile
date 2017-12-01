@@ -10,17 +10,59 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use SimpleXMLElement;
 
-class Object extends Model{
+/**
+ * Eloquent-style wrapper for Rivile data.
+ *
+ * Extremely hackish.
+ */
+class Object extends Model {
 
+	/**
+	 * Rivile table prefix.
+	 *
+	 * @var string
+	 */
 	protected static $prefix;
+	
+	/**
+	 * Primary key in Rivile table.
+	 *
+	 * @var string
+	 */
 	protected static $primary_key;
+
+	/**
+	 * Name of associated webservice get query method.
+	 *
+	 * @var string
+	 */
 	protected static $query_method;
+
+	/**
+	 * List of attributes with validation rules.
+	 *
+	 * @var array
+	 */
 	protected static $defs;
+
+	/**
+	 * List of relation definitions.
+	 *
+	 * @var array
+	 */
 	protected static $relation_map;
+
+	/**
+	 * Attribute to pass to related objects.
+	 *
+	 * @var string
+	 */
 	protected static $relation_key;
 
 	protected $dateFormat = "Y-m-d H:i:s.u";
 	protected $table = '';
+	public $incrementing = false;
+	public $timestamps = false;
 
 	protected static function boot() {
         parent::bootTraits();
@@ -67,11 +109,24 @@ class Object extends Model{
 		return parent::fill($data);
 	}
 
+	/**
+	 * Construct a prefixed version of an attribute name.
+	 *
+	 * @param string $name
+	 * @return string
+	 */
 	protected static function prefixedName ($name) {
 		$name = static::$prefix ? static::$prefix.'_'.$name : $name;
 		return strtolower($name);
 	}
 
+	/**
+	 * Cast attribute value to appropriate data type, based on definition.
+	 *
+	 * @param mixed $value
+	 * @param array $def
+	 * @return mixed
+	 */
 	protected static function castValue ($value, $def) {
 		if (!isset($def[0])) return $value;
 		if ($value === null) return $value;
@@ -101,6 +156,15 @@ class Object extends Model{
 		return static::castValue($value, $def);
 	}
 
+	/**
+	 * Process potential attribute name
+	 *
+	 * Returns full prefixed attribute name if a match is found,
+	 * otherwise returns original input.
+	 *
+	 * @param string $name
+	 * @return string
+	 */
 	public static function attrName ($name) {
 		$lower_name = strtolower($name);
 
@@ -113,14 +177,29 @@ class Object extends Model{
 		return $name;
 	}
 
+	/**
+	 * Get the associated get query webservice method.
+	 *
+	 * @return string
+	 */
 	public static function getQueryMethod () {
 		return isset(static::$query_method) ? static::$query_method : "GET_".static::$prefix."_LIST";
 	}
 
+	/**
+	 * Get the associated edit query webservice method.
+	 *
+	 * @return string
+	 */
 	public static function getEditMethod () {
 		return isset(static::$edit_method) ? static::$edit_method : 'EDIT_'.static::$prefix;
 	}
 
+	/**
+	 * Get primary key attribute name.
+	 *
+	 * @return string
+	 */
 	public static function getPrimaryKey () {
 		if (isset(static::$primary_key)) {
 			return static::$primary_key;
@@ -137,15 +216,29 @@ class Object extends Model{
 	/**
 	 * Terrible hack: we store Rivile key as the model's connection name
 	 * and get the appropriate RivileInterface with getConnection().
+	 *
+	 * @return ITCity\Rivile\RivileInterface
 	 */
 	public function getConnection() {
 		return new RivileInterface($this->getConnectionName());
 	}
 
+	/**
+	 * Create new instance with data loaded from Rivile.
+	 *
+	 * @param array $raw_data
+	 * @return \ITCity\Rivile\Objects\Object
+	 */
 	public function instantiate ($raw_data) {
 		return $this->newInstance()->newFromBuilder(array_change_key_case($raw_data));
 	}
 
+	/**
+	 * Hydrate object with data from Rivile.
+	 *
+	 * @param array $attributes
+	 * @return $this
+	 */
 	public function fillFromBuilder($attributes = []) {
         $this->setRawAttributes(array_change_key_case((array) $attributes), true);
 
@@ -164,6 +257,12 @@ class Object extends Model{
     	return $this;
     }
 
+	/**
+	 * Instantiate multiple objects from Rivile data in one go.
+	 *
+	 * @param array $list
+	 * @return \Illuminate\Support\Collection
+	 */
 	public function fromList ($list) {
 		$out = collect();
 		foreach ($list as $item) {
@@ -173,8 +272,7 @@ class Object extends Model{
 		return $out;
 	}
 
-	public function save(array $options = [])
-    {
+	public function save(array $options = []) {
         $query = $this->newQueryWithoutScopes();
 
         // If the "saving" event returns false we'll bail out of the save and return
@@ -243,12 +341,22 @@ class Object extends Model{
         $this->exists = false;
     }
 
+	/**
+	 * Represent current object state as an XML string.
+	 *
+	 * @return string
+	 */
 	public function toXml () {
 		$simple_xml = array_to_xml($this->attributesToArray(), new SimpleXMLElement('<'.static::$prefix.' />'));
 		$dom = dom_import_simplexml($simple_xml);
 		return $dom->ownerDocument->saveXML($dom->ownerDocument->documentElement);
 	}
 
+	/**
+	 * Get a map of relation names to classes.
+	 *
+	 * @return \Illuminate\Support\Collection
+	 */
 	public function getRelationNames() {
 		return collect((array) static::$relation_map)->mapWithKeys(function($item) {
 			return [$item['name'] => $item['class']];
@@ -260,10 +368,6 @@ class Object extends Model{
 			return $this->getRelation($key);
 		}
         return $this->getAttribute($key);
-    }
-
-    public function __set($key, $value) {
-        $this->setAttribute($key, $value);
     }
 
     public function __call ($method, $parameters) {
@@ -285,14 +389,6 @@ class Object extends Model{
     	return parent::setAttribute(static::attrName($key), $value);
     }
 
-    public function relationLoaded($key) {
-    	return false;
-    }
-
-    public function getIncrementing() {
-    	return false;
-    }
-
     public function getKeyName () {
     	return $this->getPrimaryKey();
     }
@@ -301,10 +397,6 @@ class Object extends Model{
         return collect(static::$defs)->filter(function($item) {
         	return array_get($item, 0) == 'date';
         })->keys()->all();
-    }
-
-    public function usesTimestamps() {
-    	return false;
     }
 
     public function hasCast($key, $types = null) {
@@ -339,6 +431,11 @@ class Object extends Model{
     	
     }
 
+    /**
+     * Get a Rivile facade.
+     *
+     * @return \ITCity\Rivile\Rivile
+     */
     public function rivile() {
     	return new Rivile($this->getConnectionName());
     }
