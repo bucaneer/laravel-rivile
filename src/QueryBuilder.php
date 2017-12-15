@@ -240,7 +240,7 @@ class QueryBuilder extends Builder {
     public function selectSub($query, $as) { return $this->__missingMethod(); }
     public function addSelect($column) { return $this->__missingMethod(); }
     public function distinct() { return $this->__missingMethod(); }
-    public function from($table) { return $this->__missingMethod(); }
+    //public function from($table) { return $this->__missingMethod(); }
     public function join($table, $first, $operator = null, $second = null, $type = 'inner', $where = false) { return $this->__missingMethod(); }
     public function joinWhere($table, $first, $operator, $second, $type = 'inner') { return $this->__missingMethod(); }
     public function leftJoin($table, $first, $operator = null, $second = null) { return $this->__missingMethod(); }
