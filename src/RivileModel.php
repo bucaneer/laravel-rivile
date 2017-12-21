@@ -28,7 +28,7 @@ class RivileModel extends Model
      */
     protected function mapFromRivile (Object $object, $only = null) {
         $class = get_class($object);
-        if (!isset($this->rivile_map[$class])) throw new RivileNoMapping;
+        if (!isset($this->rivile_map[$class])) throw new RivileNoMapping(get_class($object));
 
         $class_map = $this->rivile_map[$class];
         if (is_array($only)) {
