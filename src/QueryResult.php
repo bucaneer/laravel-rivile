@@ -17,6 +17,13 @@ class QueryResult extends Collection {
 	public $query;
 
 	/**
+	 * QueryBuilder instance that nextQuery is based on.
+	 *
+	 * @var \ITCity\Rivile\QueryBuilder
+	 */
+	public $base_query;
+
+	/**
 	 * Number of items loaded on latest load.
 	 *
 	 * @var int
@@ -56,14 +63,18 @@ class QueryResult extends Collection {
 	 */
 	public function nextQuery() {
 		if (!isset($this->query)) return null;
+		if (!isset($this->base_query)) {
+			$this->base_query = $this->query;
+		}
 		
 		// Get query method definition
-		$interface = $this->query->getInterface();
-		$method_def = $interface->getMethodDef($this->query->getQueryMethod());
+		$interface = $this->base_query->getInterface();
+		$method_def = $interface->getMethodDef($this->base_query->getQueryMethod());
 		if (!isset($method_def['order'])) return null;
 		
 		$order_cols = $method_def['order'];
-		$next_query = clone $this->query;
+		$next_query = clone $this->base_query;
+		$next_query->base_query = $this->base_query;
 		$main_col = array_shift($order_cols);
 		// Assume the items haven't been reordered since retrieval.
 		$final_item = $this->last();
@@ -98,7 +109,9 @@ class QueryResult extends Collection {
 	public function next() {
 		$query = $this->nextQuery();
 		if (!$query) return new static([], null);
-		return $query->get();
+		$next = $query->get();
+		$next->base_query = $this->base_query;
+		return $next;
 	}
 
 	/**
