@@ -79,6 +79,7 @@ class QueryResult extends Collection {
 					$q->where($main_col, '=', $final_item->{$main_col});
 					$q->where(function($q) use ($order_cols, $final_item) {
 						foreach ($order_cols as $col) {
+							if (!isset($final_item->{$col})) continue;
 							$q->where($col, '>', $final_item->{$col});
 						}
 					});
