@@ -95,4 +95,15 @@ class RivileModel extends Model
 
     	return $model;
     }
+
+    /**
+     * Update mappable attributes in existing model instance.
+     *
+     * @param \ITCity\Rivile\Objects\Object $object
+     */
+    public function updateFromRivile(Object $object) {
+        $this->mapFromRivile($object);
+
+        return $this;
+    }
 }
