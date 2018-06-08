@@ -484,7 +484,13 @@ class RivileInterface {
 
 		reset($raw);
 		if(key($raw) == 'ERROR') {
-			throw new Exceptions\RivileSoapError(print_r(current($raw), true)."\nArguments: ".print_r($arguments, true));
+			$debug = [
+				'error' => current($raw),
+				'method' => $method,
+				'arguments' => $arguments,
+				'key' => $this->key,
+			];
+			throw new Exceptions\RivileSoapError(print_r($debug, true));
 		}
 
 		$root = array_first($raw);
