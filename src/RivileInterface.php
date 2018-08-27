@@ -437,7 +437,7 @@ class RivileInterface {
 				$this->retryCount++;
 				return $this->_soapMethod($method, $params);
 			} else {
-				logger("SoapFault", [$method, $call_params, $this->soapclient->__getLastResponse()]);
+				logger("SoapFault", [$method, $call_params, $this->soapclient ? $this->soapclient->__getLastResponse() : null]);
 				throw $e;
 			}
 		}
