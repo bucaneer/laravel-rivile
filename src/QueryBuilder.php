@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile;
 
-use ITCity\Rivile\Objects\Object;
+use ITCity\Rivile\Objects\RivileObject;
 use ITCity\Rivile\Exceptions\RivileMalformedWhere;
 use Closure;
 use Illuminate\Database\Query\Builder;
@@ -20,7 +20,7 @@ class QueryBuilder extends Builder {
 	/**
 	 * Associated Object instance.
 	 *
-	 * @var ITCity\Rivile\Objects\Object
+	 * @var ITCity\Rivile\Objects\RivileObject
 	 */
 	public $rivile_object;
 
@@ -34,7 +34,7 @@ class QueryBuilder extends Builder {
 	/**
 	 * Create new QueryBuilder instance.
 	 *
-	 * @param \ITCity\Rivile\Objects\Object $object
+	 * @param \ITCity\Rivile\Objects\RivileObject $object
 	 * @param \Illuminate\Database\ConnectionInterface  $connection
 	 * @param \Illuminate\Database\Query\Grammars\Grammar  $grammar
 	 * @param \Illuminate\Database\Query\Processors\Processor  $processor

@@ -3,14 +3,14 @@
 namespace ITCity\Rivile;
 
 use Illuminate\Database\Eloquent\Model;
-use ITCity\Rivile\Objects\Object;
+use ITCity\Rivile\Objects\RivileObject;
 use ITCity\Rivile\Exceptions\RivileNoMapping;
 
 class RivileModel extends Model
 {
     /**
      * Array of attribute mappings. Format:
-     * [ 
+     * [
      *    'ITCity\Rivile\Objects\ObjectClassName' => [
      *       'model_attribute_name' => $rivile_object_mapping,
      *    ]
@@ -23,10 +23,10 @@ class RivileModel extends Model
     /**
      * Maps model attributes from Rivile Object attributes.
      *
-     * @param \ITCity\Rivile\Objects\Object $object
+     * @param \ITCity\Rivile\Objects\RivileObject $object
      * @param null|array $only Limit attributes to map.
      */
-    protected function mapFromRivile (Object $object, $only = null) {
+    protected function mapFromRivile (RivileObject $object, $only = null) {
         $class = get_class($object);
         if (!isset($this->rivile_map[$class])) throw new RivileNoMapping(get_class($object));
 
@@ -44,14 +44,14 @@ class RivileModel extends Model
     /**
      * Maps a single attribute value from Rivile object.
      *
-     * @param \ITCity\Rivile\Objects\Object $object
+     * @param \ITCity\Rivile\Objects\RivileObject $object
      * @param mixed $mapping
      */
-    protected function mapAttributeFromRivile (Object $object, $mapping) {
+    protected function mapAttributeFromRivile (RivileObject $object, $mapping) {
         // Simple value copy
         if (is_string($mapping)) {
             return $object->{$mapping};
-        } 
+        }
 
         // Set attribute to return value of callable
         else if (is_callable($mapping)) {
@@ -75,10 +75,10 @@ class RivileModel extends Model
     /**
      * Picks first set attribute from a list of alternatives.
      *
-     * @param \ITCity\Rivile\Objects\Object $object
+     * @param \ITCity\Rivile\Objects\RivileObject $object
      * @param array $params
      */
-    protected function mapCustomTypeFirst (Object $object, $params) {
+    protected function mapCustomTypeFirst (RivileObject $object, $params) {
         foreach ($params as $alt) {
             if (isset($object->{$alt})) return $object->{$alt};
         }
@@ -87,9 +87,9 @@ class RivileModel extends Model
     /**
      * Creates new model instance with mapped attributes.
      *
-     * @param \ITCity\Rivile\Objects\Object $object
+     * @param \ITCity\Rivile\Objects\RivileObject $object
      */
-    public static function fromRivile(Object $object) {
+    public static function fromRivile(RivileObject $object) {
     	$model = new static;
     	$model->mapFromRivile($object);
 
@@ -99,9 +99,9 @@ class RivileModel extends Model
     /**
      * Update mappable attributes in existing model instance.
      *
-     * @param \ITCity\Rivile\Objects\Object $object
+     * @param \ITCity\Rivile\Objects\RivileObject $object
      */
-    public function updateFromRivile(Object $object) {
+    public function updateFromRivile(RivileObject $object) {
         $this->mapFromRivile($object);
 
         return $this;
