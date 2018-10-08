@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class LoyaltyOperation extends Object {
+class LoyaltyOperation extends RivileObject {
 	protected static $prefix = 'I64';
 
 	protected static $defs = [

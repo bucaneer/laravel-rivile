@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class InvoicePDF extends Object {
+class InvoicePDF extends RivileObject {
 	protected static $query_method = 'PDF_INVOICE';
 
 	protected static $defs = [];

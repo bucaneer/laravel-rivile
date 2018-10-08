@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class InvoiceDelay extends Object {
+class InvoiceDelay extends RivileObject {
 	protected static $prefix = 'I08';
 
 	protected static $primary_key = ['i08_kodas_po', 'i08_eil_nr'];

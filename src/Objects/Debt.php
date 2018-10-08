@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class Debt extends Object {
+class Debt extends RivileObject {
 	protected static $prefix = 'I44';
 
 	protected static $defs = [

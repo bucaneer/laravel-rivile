@@ -15,7 +15,7 @@ use SimpleXMLElement;
  *
  * Extremely hackish.
  */
-class Object extends Model {
+class RivileObject extends Model {
 
 	/**
 	 * Rivile table prefix.
@@ -23,7 +23,7 @@ class Object extends Model {
 	 * @var string
 	 */
 	protected static $prefix;
-	
+
 	/**
 	 * Primary key in Rivile table.
 	 *
@@ -105,7 +105,7 @@ class Object extends Model {
 			}
 			throw new RivileInvalidObject(join('; ', $failed));
 		}
-		
+
 		return parent::fill($data);
 	}
 
@@ -227,7 +227,7 @@ class Object extends Model {
 	 * Create new instance with data loaded from Rivile.
 	 *
 	 * @param array $raw_data
-	 * @return \ITCity\Rivile\Objects\Object
+	 * @return \ITCity\Rivile\Objects\RivileObject
 	 */
 	public function instantiate ($raw_data) {
 		return $this->newInstance()->newFromBuilder(array_change_key_case($raw_data));
@@ -428,7 +428,7 @@ class Object extends Model {
         } else {
         	return parent::hasCast($key, $types);
         }
-    	
+
     }
 
     /**

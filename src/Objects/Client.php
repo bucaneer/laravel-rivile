@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class Client extends Object {
+class Client extends RivileObject {
 	protected static $prefix = 'N08';
 
 	protected static $defs = [

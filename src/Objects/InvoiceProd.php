@@ -4,7 +4,7 @@ namespace ITCity\Rivile\Objects;
 
 use ITCity\Rivile\Exceptions\RivileInvalidObject;
 
-class InvoiceProd extends Object {
+class InvoiceProd extends RivileObject {
 	protected static $prefix = 'I07';
 
 	protected static $primary_key = ['i07_kodas_po', 'i07_eil_nr'];

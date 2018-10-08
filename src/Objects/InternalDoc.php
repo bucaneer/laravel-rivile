@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class InternalDoc extends Object {
+class InternalDoc extends RivileObject {
 	protected static $prefix = 'I09';
 
 	protected static $defs = [

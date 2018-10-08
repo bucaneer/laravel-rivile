@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class InvoiceDebt extends Object {
+class InvoiceDebt extends RivileObject {
 	protected static $prefix = 'I06';
 
 	protected static $query_method = 'GET_I06_DEBT';

@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class ProductStocks extends Object {
+class ProductStocks extends RivileObject {
 	protected static $prefix = 'I17';
 
 	protected static $defs = [

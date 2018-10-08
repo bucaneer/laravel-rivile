@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class CashFlow extends Object {
+class CashFlow extends RivileObject {
 	protected static $prefix = 'I04';
 
 	protected static $defs = [

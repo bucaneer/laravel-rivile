@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class BarCode extends Object {
+class BarCode extends RivileObject {
 	protected static $prefix = 'N37';
 
 	protected static $primary_key = 'N37_BAR_KODAS';

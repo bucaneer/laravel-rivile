@@ -2,7 +2,7 @@
 
 namespace ITCity\Rivile\Objects;
 
-class ProductComponent extends Object {
+class ProductComponent extends RivileObject {
 	protected static $prefix = 'N26';
 
 	protected static $defs = [
