@@ -8,6 +8,7 @@ use ITCity\Rivile\QueryBuilder;
 use ITCity\Rivile\RivileInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use SimpleXMLElement;
 
 /**
@@ -389,6 +390,10 @@ class RivileObject extends Model {
     	return parent::setAttribute(static::attrName($key), $value);
     }
 
+    public function getAttributesAttribute($value) {
+        return $this->getAttributes();
+    }
+
     public function getKeyName () {
     	return $this->getPrimaryKey();
     }
@@ -429,6 +434,38 @@ class RivileObject extends Model {
         	return parent::hasCast($key, $types);
         }
 
+    }
+
+    /**
+     * Clone the model into a new, non-existing instance.
+     *
+     * @param  array|null  $except
+     * @return static
+     */
+    public function replicate(array $except = null)
+    {
+        $defaults = [
+            $this->getCreatedAtColumn(),
+            $this->getUpdatedAtColumn(),
+        ];
+
+        $primary = $this->getKeyName();
+
+        if (is_array($primary)) {
+            $defaults = array_merge($defaults, $primary);
+        } else {
+            $defaults[] = $primary;
+        }
+
+        $attributes = Arr::except(
+            $this->attributes, $except ? array_unique(array_merge($except, $defaults)) : $defaults
+        );
+
+        return tap(new static, function ($instance) use ($attributes) {
+            $instance->setRawAttributes($attributes);
+
+            $instance->setRelations($this->relations);
+        });
     }
 
     /**
