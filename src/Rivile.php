@@ -58,7 +58,7 @@ class Rivile {
 		'internalDocProd' => Objects\InternalDocProd::class,
 		'invoice' => Objects\Invoice::class,
 		'invoiceDelay' => Objects\InvoiceDelay::class,
-		'invoicePayment' => Objects\InvoicePayments::class,
+		'invoicePayment' => Objects\InvoicePayment::class,
 		'invoiceProd' => Objects\InvoiceProd::class,
 		'invoicePDF' => Objects\InvoicePDF::class,
 		'invoiceDebt' => Objects\InvoiceDebt::class,
